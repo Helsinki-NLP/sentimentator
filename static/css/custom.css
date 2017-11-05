@@ -1,0 +1,28 @@
+.sentiment {
+    padding-bottom: 50px;
+    color: black;
+    text-align: center
+}
+
+h1 {
+    letter-spacing: 10px;
+    padding-bottom: 40px;
+}
+
+.divider {
+    height: 10px;
+    width: 100%;
+    background-color: cornflowerblue;
+}
+
+a.button.button-primary {
+    color: whitesmoke;
+    background-color: cornflowerblue;
+    border-color: cornflowerblue;
+}
+
+a.button.button-primary:hover {
+  color: whitesmoke;
+  background-color: mediumblue;
+  border-color: mediumblue;
+}

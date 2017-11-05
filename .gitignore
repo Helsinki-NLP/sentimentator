@@ -1,3 +1,5 @@
+venv
+*.pyc
 .DS_Store
 
 # Byte-compiled / optimized / DLL files
@@ -99,3 +101,5 @@ ENV/
 
 # mypy
 .mypy_cache/
+*.xml
+.idea/Flask.iml

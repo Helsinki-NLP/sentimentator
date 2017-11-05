@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>SENTIMENTATOR</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/normalize.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/skeleton.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/custom.css') }}" />
+
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+
+</head>
+    <div class="sentiment">
+        <div class="container">
+            <div class="row">
+                <div class="twelve columns" style="margin-top: 15%">
+ 			    <h1>sentimentator</h1>
+			    <a href="/language" class="button button-primary">START ANNOTATING</a>
+			    </div>
+	        </div>
+        </div>
+	</div>
+
+<div class="divider"></div>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<body>
+	<div style="margin-top: 50px; margin-bottom: 250px" class="container">
+        <div class="row">
+            <div class="twelve columns">
+                <h4>What is Sentimentator?</h4>
+                <p style="font-size: 150%"><b>Sentimentator</b> is a game for creating fine-grained sentence-level annotations for research in <b>Sentiment Analysis</b>. Researchers need annotated sentences to compile comprehensive data sets for tasks such as machine learning.
+                    You can annotate sentences in a number of languages. Just pick the language or languages with which you want to work and start annotating!</p>
+            </div>
+            <figure style="text-align: center">
+	   		    <img src="/static/images/Plutchik_Wheel.png">
+		        <figcaption>Plutchik's wheel of emotions.
+                <p>https://en.wikipedia.org/wiki/Contrasting_and_categorization_of_emotions</p></figcaption>
+            </figure>
+            <div style="text-align: center">
+                <a href="/logout" class="button" style="margin-top: 5%; margin-bottom: 25%">LOG OUT</a>
+            </div>
+        </div>
+    </div>
+</body>
+<footer>
+
+</footer>
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</html>

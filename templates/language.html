@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>SENTIMENTATOR</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/normalize.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/skeleton.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/custom.css') }}" />
+
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+
+</head>
+  <body>
+	<div class="container" style="text-align: center">
+		<div class="row" style="margin-top: 15%">
+ 			<h1> sentimentator</h1>
+            <p>Choose the language in which you would like to annotate sentences.</p>
+            <div>
+                <a class="button" href="/annotate">English</a>
+				<a class="button" href="/annotate">suomi</a>
+				<a class="button" href="/annotate">svenska</a>
+                <br>
+				<a class="button" href="/annotate">italiano</a>
+				<a class="button" href="/annotate">русский</a>
+				<a class="button" href="/annotate">français</a>
+
+     		<div>
+				<figure style="text-align: center">
+		   		<img src="/static/images/Plutchik_Wheel.png">
+			    <figcaption>Plutchik's wheel of emotions.
+                <p>https://en.wikipedia.org/wiki/Contrasting_and_categorization_of_emotions</p></figcaption>
+				</figure>
+      		</div>
+		</div>
+        <a href="/logout" class="button" style="margin-top: 5%; margin-bottom: 25%">LOG OUT</a>
+	</div>
+  </body>
+</html>
