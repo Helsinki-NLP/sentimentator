@@ -30,9 +30,9 @@ class Sentence(db.Model):
     # define your model
     id = db.Column(db.Integer, primary_key=True)
     sentence = db.Column(db.String)
-    source_id = db.Column(db.Integer)
+    source_id = db.Column(db.Integer, db.ForeignKey('source.id'))
     language_id = db.Column(db.Integer, db.ForeignKey('language.id'))
-    doc_id = db.Column(db.Integer)
+    document_id = db.Column(db.Integer, db.ForeignKey('document.id'))
 
 class Language(db.Model):
     __tablename__ = 'language'
@@ -53,6 +53,14 @@ class Sentiment(db.Model):
 
 class User(db.Model):
     __tablename__ = 'user'
+    id = db.Column(db.Integer, primary_key=True)
+
+class Source(db.Model):
+    __tablename__ = 'source'
+    id = db.Column(db.Integer, primary_key=True)
+
+class Document(db.Model):
+    __tablename__ = 'document'
     id = db.Column(db.Integer, primary_key=True)
 
 if __name__ == '__main__':
