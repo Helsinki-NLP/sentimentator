@@ -28,32 +28,32 @@ class Sentence(db.Model):
     """model for one of your table"""
     __tablename__ = 'sentence'
     # define your model
-    sentence_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     sentence = db.Column(db.String)
     source_id = db.Column(db.Integer)
-    language_id = db.Column(db.Integer, db.ForeignKey('language.language_id'))
+    language_id = db.Column(db.Integer, db.ForeignKey('language.id'))
     doc_id = db.Column(db.Integer)
 
 class Language(db.Model):
     __tablename__ = 'language'
-    language_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     language = db.Column(db.String)
 
 class Tag(db.Model):
     __tablename__ = 'tag'
-    tag_id = db.Column(db.Integer, primary_key=True)
-    sentence_id = db.Column(db.Integer, db.ForeignKey('sentence.sentence_id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-    sentiment_id = db.Column(db.Integer, db.ForeignKey('sentiment.sentiment_id'))
+    id = db.Column(db.Integer, primary_key=True)
+    sentence_id = db.Column(db.Integer, db.ForeignKey('sentence.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    sentiment_id = db.Column(db.Integer, db.ForeignKey('sentiment.id'))
 
 class Sentiment(db.Model):
     __tablename__ = 'sentiment'
-    sentiment_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     sentiment = db.Column(db.String, index=True, unique=True)
 
 class User(db.Model):
     __tablename__ = 'user'
-    user_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
 
 if __name__ == '__main__':
     app.run()
