@@ -58,10 +58,12 @@ class User(db.Model):
 class Source(db.Model):
     __tablename__ = 'source'
     id = db.Column(db.Integer, primary_key=True)
+    source = db.Column(db.String)
 
 class Document(db.Model):
     __tablename__ = 'document'
     id = db.Column(db.Integer, primary_key=True)
+    document = db.Column(db.Integer)
 
 if __name__ == '__main__':
     app.run()
