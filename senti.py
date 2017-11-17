@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from models import db, Language, Sentence
+from models import db, Language, Sentence, Sentiment
 from sqlalchemy.sql.expression import func
 
 app = Flask(__name__)
@@ -17,14 +17,17 @@ def index():
 def language():
     return render_template('language.html')
 
-@app.route('/annotate')
-def annotate():
-    lang = request.args.get('lang')
+@app.route('/annotate/<lang>', methods=['GET', 'POST'])
+def annotate(lang):
+    if request.method == 'POST':
+        #Sentiment(sentiment=request.form['sentiment'])
+        print(request.form.get('sentiment'))
+        print(request.form.getlist('fine-sentiment'))
     result = Language.query.filter_by(language=lang).first_or_404()
-    random_sentence = Sentence.query.with_entities(Sentence.sentence)\
+    random_sentence = Sentence.query\
         .filter_by(language_id=result.id).order_by(func.random()).first()
 
-    return render_template('annotate.html', sentence=random_sentence)
+    return render_template('annotate.html', lang=lang, sentence=random_sentence)
 
 @app.route('/logout')
 def logout():

@@ -9,20 +9,37 @@ h1 {
     padding-bottom: 40px;
 }
 
-.divider {
-    height: 10px;
-    width: 100%;
-    background-color: cornflowerblue;
-}
-
-a.button.button-primary {
+.button.button-primary {
     color: whitesmoke;
     background-color: cornflowerblue;
     border-color: cornflowerblue;
 }
 
-a.button.button-primary:hover {
-  color: whitesmoke;
-  background-color: mediumblue;
-  border-color: mediumblue;
+.button.button-primary:hover {
+    background-color: #4670ba;
+    border-color: #4670ba;
+}
+
+input[type="radio"], input[type="checkbox"] {
+    display: none;
+}
+
+input[type="radio"]:checked + label {
+    background-color: #4670ba;
+    border-color: #1a2e54;
+}
+
+input[type="checkbox"]:checked + label {
+    border-color: #888;
+    background-color: #eee;
+}
+
+#submit {
+    border-color: cornflowerblue;
+    background-color: cornflowerblue;
+}
+
+#submit:hover {
+    border-color: #4670ba;
+    background-color: #4670ba;
 }

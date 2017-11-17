@@ -12,6 +12,9 @@ class Sentence(db.Model):
     language_id = db.Column(db.Integer, db.ForeignKey('language.id'))
     #document_id = db.Column(db.Integer, db.ForeignKey('document.id'))
 
+    def __str__(self):
+        return self.sentence
+
 class Language(db.Model):
     __tablename__ = 'language'
     id = db.Column(db.Integer, primary_key=True)

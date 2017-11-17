@@ -30,29 +30,50 @@
 
 </head>
 <header>
+<form method="post" action="/annotate/{{ lang }}">
 	<div class="container" style="text-align: center">
 		<div class="row">
 			<div style="margin-top: 15%; margin-bottom: 25%">
  			    <h1>SENTIMENTATOR</h1>
                 <p>Select the emotions which you think best suit the sentence.</p>
                 <p>{{ sentence }}</p>
-                <div>
-				    <a class="button button-primary">POSITIVE</a>
-				    <a class="button button-primary">NEUTRAL</a>
-				    <a class="button button-primary">NEGATIVE</a>
+                <div class="sentiment-selection">
+                    <input type="radio" name="sentiment" id="pos" value="pos">
+                    <label for="pos" class="button button-primary">POSITIVE</label>
+                    <input type="radio" name="sentiment" id="neut" value="neut">
+                    <label for="neut" class="button button-primary">NEUTRAL</label>
+                    <input type="radio" name="sentiment" id="neg" value="neg">
+                    <label for="neg" class="button button-primary">NEGATIVE</label>
+
                 </div><br>
                 <div>
-                    <button>ANTICIPATION</button>
-                    <button>JOY</button>
-                    <button>SURPRISE</button>
-                    <button>TRUST</button><br>
-                    <button>ANGER</button>
-				    <button>FEAR</button>
-                    <button>DISGUST</button>
-				    <button>SADNESS</button>
-                </div><br>
+                    <input type="checkbox" name="fine-sentiment" id="ant" value="ant">
+                    <label for="ant" class="button">ANTICIPATION</label>
+
+                    <input type="checkbox" name="fine-sentiment" id="joy" value="joy">
+                    <label for="joy" class="button">JOY</label>
+
+                    <input type="checkbox" name="fine-sentiment" id="sur">
+                    <label for="sur" class="button">SURPRISE</label>
+
+                    <input type="checkbox" name="fine-sentiment" id="tru">
+                    <label for="tru" class="button">TRUST</label>
+
+                    <input type="checkbox" name="fine-sentiment" id="ang">
+                    <label for="ang" class="button">ANGER</label>
+
+                    <input type="checkbox" name="fine-sentiment" id="fea">
+                    <label for="fea" class="button">FEAR</label>
+
+                    <input type="checkbox" name="fine-sentiment" id="dis">
+                    <label for="dis" class="button">DISGUST</label>
+
+                    <input type="checkbox" name="fine-sentiment" id="sad">
+                    <label for="sad" class="button">SADNESS</label>
+                </div>
                 <div>
-                    <a class="button button-primary">SAVE</a></div>
+                    <input type="submit" id="submit" class="button button-primary" value="SAVE">
+                </div>
 			    <figure>
 	   		    <img src="/static/images/Plutchik_Wheel.png">
 		        <figcaption>Plutchik's wheel of emotions.
@@ -62,6 +83,7 @@
 			</div>
 	    </div>
 	</div>
+</form>
 </header>
 <body>
 
