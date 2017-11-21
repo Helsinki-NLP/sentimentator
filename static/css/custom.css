@@ -13,11 +13,20 @@ h1 {
     color: whitesmoke;
     background-color: cornflowerblue;
     border-color: cornflowerblue;
+    display: inline-block;
+    width: 150px;
+    text-align: center;
 }
 
 .button.button-primary:hover {
     background-color: #4670ba;
     border-color: #4670ba;
+}
+
+.button {
+    display: inline-block;
+    width: 150px;
+    text-align: center;
 }
 
 input[type="radio"], input[type="checkbox"] {
@@ -35,11 +44,11 @@ input[type="checkbox"]:checked + label {
 }
 
 #submit {
-    border-color: cornflowerblue;
-    background-color: cornflowerblue;
+    border-color: forestgreen;
+    background-color: forestgreen;
 }
 
 #submit:hover {
-    border-color: #4670ba;
-    background-color: #4670ba;
+    border-color: #1B701B;
+    background-color: #1B701B;
 }
