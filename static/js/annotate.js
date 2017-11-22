@@ -5,12 +5,12 @@
 function fineReveal() {
   var elem = document.querySelectorAll('#fine1, #fine2');
   Array.prototype.forEach.call(elem, function(e) {
-    e.style.display = 'inline-block';
+    e.style.display = 'block';
   });
 }
 
 function submitReveal() {
-  document.getElementById('submit').style.display = 'inline-block';
+  document.getElementById('submit').style.display = 'block';
 }
 
 function init() {
