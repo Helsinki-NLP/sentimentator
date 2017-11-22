@@ -14,12 +14,16 @@ function submitReveal() {
 }
 
 function init() {
-  var coarse = document.querySelectorAll('#coarse input');
+  var coarse = document.querySelectorAll('#pos, #neg');
+  var neutral = document.querySelectorAll('#neut');
   var fine   = document.querySelectorAll('#fine1 input, #fine2 input');
   var hidden = document.querySelectorAll('#fine1, #fine2, #submit');
 
   Array.prototype.forEach.call(coarse, function(e) {
     e.onchange = fineReveal;
+  });
+    Array.prototype.forEach.call(neutral, function(e) {
+    e.onchange = submitReveal;
   });
   Array.prototype.forEach.call(fine, function(e) {
     e.onchange = submitReveal;
