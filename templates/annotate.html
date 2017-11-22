@@ -1,33 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-
-  <!-- Basic Page Needs
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta charset="utf-8">
-  <title>SENTIMENTATOR</title>
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <!-- Mobile Specific Metas
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- FONT
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-
-  <!-- CSS
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/normalize.css') }}" />
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/skeleton.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/custom.css') }}" />
-
-
-  <!-- Favicon
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
-
+<meta charset="utf-8">
+<title>Sentimentator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/normalize.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/skeleton.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/custom.css') }}" />
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
 </head>
 <header>
 <form method="post" action="/annotate/{{ lang }}">
