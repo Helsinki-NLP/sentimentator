@@ -8,6 +8,7 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/skeleton.css') }}" />
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/custom.css') }}" />
 <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+<script src="{{ url_for('static', filename='js/annotate.js') }}"></script>
 </head>
 <body>
 
@@ -40,7 +41,7 @@
   </div>
 </div>
 
-<div id="fine-fst" class="row divide">
+<div id="fine1" class="row divide">
   <div class="three columns">
     <input type="checkbox" name="fine-sentiment" id="ant" value="ant">
     <label for="ant" class="button">anticipation</label>
@@ -62,7 +63,7 @@
   </div>
 </div>
 
-<div id="fine-snd" class="row">
+<div id="fine2" class="row">
   <div class="three columns">
     <input type="checkbox" name="fine-sentiment" id="ang" value="ang">
     <label for="ang" class="button">anger</label>
