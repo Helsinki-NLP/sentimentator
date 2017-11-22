@@ -36,6 +36,7 @@
 			<div style="margin-top: 15%; margin-bottom: 25%">
  			    <h1>SENTIMENTATOR</h1>
                 <p>Select the emotions which you think best suit the sentence.</p>
+                <p><b>{{ errors }}</b></p>
                 <p>{{ sentence }}</p>
                 <div class="sentiment-selection">
                     <input type="radio" name="sentiment" id="pos" value="pos">
@@ -53,22 +54,22 @@
                     <input type="checkbox" name="fine-sentiment" id="joy" value="joy">
                     <label for="joy" class="button">JOY</label>
 
-                    <input type="checkbox" name="fine-sentiment" id="sur">
+                    <input type="checkbox" name="fine-sentiment" id="sur" value="sur">
                     <label for="sur" class="button">SURPRISE</label>
 
-                    <input type="checkbox" name="fine-sentiment" id="tru">
+                    <input type="checkbox" name="fine-sentiment" id="tru" value="tru">
                     <label for="tru" class="button">TRUST</label>
 
-                    <input type="checkbox" name="fine-sentiment" id="ang">
+                    <input type="checkbox" name="fine-sentiment" id="ang" value="ang">
                     <label for="ang" class="button">ANGER</label>
 
-                    <input type="checkbox" name="fine-sentiment" id="fea">
+                    <input type="checkbox" name="fine-sentiment" id="fea" value="fea">
                     <label for="fea" class="button">FEAR</label>
 
-                    <input type="checkbox" name="fine-sentiment" id="dis">
+                    <input type="checkbox" name="fine-sentiment" id="dis" value="dis">
                     <label for="dis" class="button">DISGUST</label>
 
-                    <input type="checkbox" name="fine-sentiment" id="sad">
+                    <input type="checkbox" name="fine-sentiment" id="sad" value="sad">
                     <label for="sad" class="button">SADNESS</label>
                 </div>
                 <div class="twelve columns">
