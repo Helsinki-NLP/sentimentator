@@ -1,34 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-
-  <!-- Basic Page Needs
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta charset="utf-8">
-  <title>SENTIMENTATOR</title>
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <!-- Mobile Specific Metas
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- FONT
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-
-  <!-- CSS
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/normalize.css') }}" />
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/skeleton.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/custom.css') }}" />
-
-
-  <!-- Favicon
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
-
+<title>Sentimentator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/normalize.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/skeleton.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/custom.css') }}" />
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+<script src="{{ url_for('static', filename='js/annotate.js') }}"></script>
 </head>
+<<<<<<< HEAD
 <header>
 <form method="post" action="/annotate/{{ lang }}">
 	<div class="container" style="text-align: center">
@@ -86,7 +68,95 @@
 	</div>
 </form>
 </header>
+=======
+>>>>>>> 9455ac5f63eea07b653eaa0e880c960e560d1ef2
 <body>
 
+<form method="post" action="/annotate/{{ lang }}">
+<div class="container">
+
+<div class="row">
+  <h1>Sentimentator</h1>
+</div>
+
+<div class="row">
+  <p class="info">Select the emotions which you think best suit the sentence.</p>
+  <p class="sentence">» This is a example lorem ipsum sentence. «</p>
+</div>
+
+<div id="coarse" class="row divide">
+  <div class="four columns">
+    <input type="radio" name="sentiment" id="pos" value="positive">
+    <label for="pos" class="button button-primary">positive</label>
+  </div>
+
+  <div class="four columns">
+  <input type="radio" name="sentiment" id="neut" value="neutral">
+  <label for="neut" class="button button-primary">neutral</label>
+  </div>
+
+  <div class="four columns">
+    <input type="radio" name="sentiment" id="neg" value="negative">
+    <label for="neg" class="button button-primary">negative</label>
+  </div>
+</div>
+
+<div id="fine1" class="row divide">
+  <div class="three columns">
+    <input type="checkbox" name="fine-sentiment" id="ant" value="ant">
+    <label for="ant" class="button">anticipation</label>
+  </div>
+
+  <div class="three columns">
+    <input type="checkbox" name="fine-sentiment" id="joy" value="joy">
+    <label for="joy" class="button">joy</label>
+  </div>
+
+  <div class="three columns">
+    <input type="checkbox" name="fine-sentiment" id="sur" value="sur">
+    <label for="sur" class="button">surprise</label>
+  </div>
+
+  <div class="three columns">
+    <input type="checkbox" name="fine-sentiment" id="tru" value="tru">
+    <label for="tru" class="button">trust</label>
+  </div>
+</div>
+
+<div id="fine2" class="row">
+  <div class="three columns">
+    <input type="checkbox" name="fine-sentiment" id="ang" value="ang">
+    <label for="ang" class="button">anger</label>
+  </div>
+
+  <div class="three columns">
+    <input type="checkbox" name="fine-sentiment" id="fea" value="fea">
+    <label for="fea" class="button">fear</label>
+  </div>
+
+  <div class="three columns">
+    <input type="checkbox" name="fine-sentiment" id="dis" value="dis">
+    <label for="dis" class="button">disgust</label>
+  </div>
+
+  <div class="three columns">
+    <input type="checkbox" name="fine-sentiment" id="sad" value="sad">
+    <label for="sad" class="button">sadness</label>
+  </div>
+</div>
+
+<div class="row divide">
+<input type="submit" id="submit" class="button button-primary" value="save">
+</div>
+
+<div class="row divide">
+<figure>
+<img src="/static/images/Plutchik_Wheel.png">
+<figcaption><a href="https://en.wikipedia.org/wiki/Contrasting_and_categorization_of_emotions">Plutchik's wheel of emotions.</a></figcaption>
+</figure>
+</div>
+
+</div> <!-- class=container -->
+</form>
 </body>
 </html>
