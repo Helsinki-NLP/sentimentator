@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
-from models import db, Language, Sentence, Sentiment
+from models import db, Language, Sentence, Tag
 from sqlalchemy.sql.expression import func
+from wtforms import Form, BooleanField, StringField, validators
 
 app = Flask(__name__)
 
@@ -19,19 +20,36 @@ def language():
 
 @app.route('/annotate/<lang>', methods=['GET', 'POST'])
 def annotate(lang):
-    if request.method == 'POST':
-        #Sentiment(sentiment=request.form['sentiment'])
-        print(request.form.get('sentiment'))
-        print(request.form.getlist('fine-sentiment'))
+
+    def valid(input):
+        valid_fine_sentiments = ['ant', 'joy', 'sur', 'ang', 'fea', 'dis', 'tru', 'sad']
+        return input in valid_fine_sentiments
+
     result = Language.query.filter_by(language=lang).first_or_404()
-    random_sentence = Sentence.query\
+    random_sentence = Sentence.query \
         .filter_by(language_id=result.id).order_by(func.random()).first()
 
+    coarse = request.form.get('sentiment')
+    fine = request.form.getlist('fine-sentiment')
+    if request.method == 'POST':
+        if coarse == 'neut':
+            valid = True
+            tag = Tag(pnn=coarse)
+            db.session.add(tag)
+            db.session.commit()
+        elif coarse in ['pos', 'neg']:
+            if all([valid(x) for x in fine]):
+                valid = True
+
     return render_template('annotate.html', lang=lang, sentence=random_sentence)
+
 
 @app.route('/logout')
 def logout():
     return render_template('logout.html')
+
+class AnnotationForm(Form):
+    pos = BooleanField('POSITIVE')
 
 if __name__ == '__main__':
     app.run()
