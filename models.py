@@ -1,16 +1,13 @@
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
-
 class Sentence(db.Model):
-    """model for one of your table"""
     __tablename__ = 'sentence'
-    # define your model
     id = db.Column(db.Integer, primary_key=True)
     sentence = db.Column(db.String)
-    #source_id = db.Column(db.Integer, db.ForeignKey('source.id'))
+    source_id = db.Column(db.Integer, db.ForeignKey('source.id'))
     language_id = db.Column(db.Integer, db.ForeignKey('language.id'))
-    #document_id = db.Column(db.Integer, db.ForeignKey('document.id'))
+    document_id = db.Column(db.Integer, db.ForeignKey('document.id'))
 
     def __str__(self):
         return self.sentence

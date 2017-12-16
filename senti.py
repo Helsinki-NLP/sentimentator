@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
-from models import db, Language, Sentence, Tag
+from models import *
 from sqlalchemy.sql.expression import func
-from wtforms import Form, BooleanField, StringField, validators
+from wtforms import Form, BooleanField
 
 app = Flask(__name__)
 
@@ -32,14 +32,21 @@ def annotate(lang):
     coarse = request.form.get('sentiment')
     fine = request.form.getlist('fine-sentiment')
     if request.method == 'POST':
-        if coarse == 'neut':
+        if coarse == 'neu':
             valid = True
+            print('User selected neu')
             tag = Tag(pnn=coarse)
             db.session.add(tag)
             db.session.commit()
         elif coarse in ['pos', 'neg']:
+            print('User selected pos or neg')
             if all([valid(x) for x in fine]):
                 valid = True
+                tag = Tag(pnn=coarse)
+
+                db.session.add(tag)
+                db.session.commit()
+
 
     return render_template('annotate.html', lang=lang, sentence=random_sentence)
 
