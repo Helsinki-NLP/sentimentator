@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from senti import app, db
-from models import *
+from sentimentator.app import app
+from sentimentator.model import db
 
-from pprint import pprint
 
 DADA = {
     'en': [
@@ -33,10 +32,8 @@ DADA = {
 
 with app.app_context():
     db.create_all()
-
     for i, lang in enumerate(DADA):
         db.session.add(Language(id=i, language=lang))
         for sentence in DADA[lang]:
             db.session.add(Sentence(sentence=sentence, language_id=i))
-
     db.session.commit()

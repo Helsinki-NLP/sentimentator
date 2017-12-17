@@ -1,6 +1,7 @@
 venv
 *.pyc
 .DS_Store
+*.sqlite
 *.db
 
 # Byte-compiled / optimized / DLL files
