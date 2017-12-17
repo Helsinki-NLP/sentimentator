@@ -2,8 +2,7 @@
 # sentimentator
 
 *Sentimentator* is a tool for creating fine-grained sentence-level annotations
-for research in *Sentiment Analysis*. Annotated sentences are needed to compile
-comprehensive data sets for tasks such as machine learning.
+for research in *Sentiment Analysis*. Annotations are needed for compiling data sets for machine learning tasks.
 
 ## Usage
 
