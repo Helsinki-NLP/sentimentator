@@ -10,24 +10,31 @@ VALID_FINE_SENTIMENTS = ['ant', 'joy', 'sur', 'ang', 'fea', 'dis', 'tru', 'sad']
 
 
 def init(app):
+    """ Initiate datamodel """
     db.init_app(app)
 
 
 def get_random_sentence(lang):
-    la = Language.query.filter_by(language=lang).first()
-    return Sentence.query.filter_by(language_id=la.id).order_by(func.random()).first()
+    """ Fetch a random sentence of given language """
+    language = Language.query.filter_by(language=lang).first()
+    return Sentence.query \
+                   .filter_by(language_id=language.id) \
+                   .order_by(func.random()) \
+                   .first()
 
 
 def _is_valid(fine):
+    """ Return true if given argument is valid fine sentiment """
     return fine in VALID_FINE_SENTIMENTS
 
 
-def _save_neutral(fine):
-    db.session.add(Tag(pnn='neu'))
-    db.session.commit()
-
-
 def _save(coarse, fine=None):
+    """
+    Save validated sentiments to database
+
+    coarse -- Coarse sentiment
+    fine   -- A list of fine sentiments
+    """
     if fine is None:
         db.session.add(Tag(pnn=coarse))
     else:
@@ -37,6 +44,13 @@ def _save(coarse, fine=None):
 
 
 def save_annotation(req):
+    """
+    Validate given request and save sentiments to database
+
+    req -- HTTP request object with POST data
+
+    Return Status object indicating the result of the validation.
+    """
     coarse = req.form.get('sentiment')
     fine = req.form.getlist('fine-sentiment')
 
