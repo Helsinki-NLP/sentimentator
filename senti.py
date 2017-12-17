@@ -1,7 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 from flask import Flask, render_template, request
-from models import *
 from sqlalchemy.sql.expression import func
-from wtforms import Form, BooleanField
+#from wtforms import Form, BooleanField, StringField, validators
+
+from models import *
 
 app = Flask(__name__)
 
@@ -20,7 +24,6 @@ def language():
 
 @app.route('/annotate/<lang>', methods=['GET', 'POST'])
 def annotate(lang):
-
     def valid(input):
         valid_fine_sentiments = ['ant', 'joy', 'sur', 'ang', 'fea', 'dis', 'tru', 'sad']
         return input in valid_fine_sentiments
@@ -55,8 +58,8 @@ def annotate(lang):
 def logout():
     return render_template('logout.html')
 
-class AnnotationForm(Form):
-    pos = BooleanField('POSITIVE')
+#class AnnotationForm(Form):
+#    pos = BooleanField('POSITIVE')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
