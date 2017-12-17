@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from sentimentator.app import app
-from sentimentator.model import db
+from sentimentator.model import db, Language, Sentence
 
 
 DADA = {
