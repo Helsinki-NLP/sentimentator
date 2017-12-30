@@ -5,14 +5,10 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY static/ static/
-COPY templates/ templates/
+COPY sentimentator/ sentimentator/
 COPY init_db.py .
-COPY models.py .
-COPY senti.py .
-
-RUN chmod 0755 senti.py
+COPY main.py .
 
 EXPOSE 5000
 
-ENTRYPOINT ["./senti.py"]
+ENTRYPOINT ["python", "main.py"]
