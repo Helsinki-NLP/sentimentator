@@ -26,43 +26,39 @@
 
   <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.ico') }}">
 
 </head>
-    <div class="sentiment">
-        <div class="container">
-            <div class="row" style="text-align: center">
-                <div class="six columns" style="margin-top: 10%">
- 			    <h1>SENTIMENTATOR</h1>
-			    <a href="/language" class="button button-primary">START ANNOTATING</a>
-			    </div>
-	        </div>
-        </div>
-	</div>
+  <div class="container" style="text-align: center">
+    <div class="row" style="margin-top: 10%">
+      <h1>SENTIMENTATOR</h1>
+      <div class="six columns offset-by-three" style="text-align: center">
+        <a href="/language" class="button button-primary">START ANNOTATING</a>
+      </div>
+    </div>
+  </div>
+</div>
 
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 <body>
-	<div class="container">
-        <div class="row">
-            <div class="twelve columns">
-                <h4>What is Sentimentator?</h4>
-                <p style="font-size: 150%"><b>Sentimentator</b> is a game for creating fine-grained sentence-level annotations for research in <b>Sentiment Analysis</b>. Researchers need annotated sentences to compile comprehensive data sets for tasks such as machine learning.
+  <div class="container">
+    <div class="row">
+      <div class="twelve columns">
+        <p style="font-size: 150%"><b>Sentimentator</b> is a game for creating fine-grained sentence-level annotations for research in <b>Sentiment Analysis</b>. Researchers need annotated sentences to compile comprehensive data sets for tasks such as machine learning.
                     You can annotate sentences in a number of languages. Just pick the language or languages with which you want to work and start annotating!</p>
-            </div>
-            <figure style="text-align: center">
-	   		    <img src="/static/images/Plutchik_Wheel.png">
-		        <figcaption><a href="https://en.wikipedia.org/wiki/Contrasting_and_categorization_of_emotions">Plutchik's wheel of emotions.</a></figcaption>
-            </figure>
-            <div style="text-align: center">
-                <a href="/logout" class="button">LOG OUT</a>
-            </div>
-        </div>
+      </div>
+      <figure style="text-align: center">
+        <img src="/static/images/Plutchik_Wheel.png">
+        <figcaption><a href="https://en.wikipedia.org/wiki/Contrasting_and_categorization_of_emotions">Plutchik's wheel of emotions.</a></figcaption>
+      </figure>
+      <div class="six columns offset-by-three" style="text-align: center">
+        <a href="/logout" class="button">LOG OUT</a>
+      </div>
     </div>
+  </div>
 </body>
-<footer>
 
-</footer>
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 </html>
