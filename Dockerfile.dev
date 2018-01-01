@@ -1,0 +1,14 @@
+FROM python:alpine
+
+WORKDIR /app
+
+RUN apk add --no-cache curl sqlite
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+EXPOSE 5000
+
+VOLUME /app
+
+ENTRYPOINT ["python", "main.py"]
