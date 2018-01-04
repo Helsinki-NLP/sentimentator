@@ -30,16 +30,35 @@
 
 </head>
 
-<header>
-  <div class="container">
-    <div class="row">
-      <div class="one-half column" style="margin-top: 25%">
-      <h2>You are now logged out. Let's continue later!</h2>
-	  </div>
-	</div>
+<div class="container" style="text-align: center">
+  <div class="row" style="margin-top: 10%">
+    <h1>SENTIMENTATOR</h1>
+    <div class="six columns offset-by-three" style="text-align: center">
+    </div>
   </div>
-</header>
+</div>
+<body>
 
-<!-- End Document
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+{% block content %}
+    <h1>Sign In</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.username.label }}<br>
+            {{ form.username(size=32) }}<br>
+            {% for error in form.username.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size=32) }}<br>
+            {% for error in form.password.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}
+</body>
 </html>

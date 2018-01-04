@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from flask_sqlalchemy import SQLAlchemy
-
-
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 db = SQLAlchemy()
 
 
@@ -28,3 +28,17 @@ class Tag(db.Model):
     pnn = db.Column(db.String)
     sentiment = db.Column(db.String)
     sentence_id = db.Column(db.Integer, db.ForeignKey('sentence.id'))
+
+
+class User(UserMixin, db.Model):
+    __tablename__ = 'user'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String)
+    password = db.Column(db.String)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'))
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)

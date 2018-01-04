@@ -22,7 +22,7 @@ function init() {
   Array.prototype.forEach.call(coarse, function(e) {
     e.onchange = fineReveal;
   });
-    Array.prototype.forEach.call(neutral, function(e) {
+  Array.prototype.forEach.call(neutral, function(e) {
     e.onchange = submitReveal;
   });
   Array.prototype.forEach.call(fine, function(e) {
