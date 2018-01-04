@@ -3,7 +3,7 @@
 from sqlalchemy.sql.expression import func
 
 from sentimentator.meta import Status
-from sentimentator.model import db, Language, Sentence, Tag
+from sentimentator.model import db, Language, Sentence, Tag, User
 
 
 VALID_FINE_SENTIMENTS = ['ant', 'joy', 'sur', 'ang', 'fea', 'dis', 'tru', 'sad']
