@@ -59,6 +59,13 @@
             {% endfor %}
         </p>
         <p style="">{{ form.submit() }}</p>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
     </form>
     </div>
 {% endblock %}

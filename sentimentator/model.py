@@ -4,6 +4,11 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 db = SQLAlchemy()
+from sentimentator.app import login
+
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(id))
 
 
 class Language(db.Model):
@@ -36,6 +41,9 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String)
     password = db.Column(db.String)
     tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'))
+
+    def __repr__(self):
+        return '<User {}>'.format(self.username)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

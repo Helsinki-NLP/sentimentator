@@ -6,10 +6,10 @@ from sentimentator.meta import Message, Status
 from sentimentator.database import init, get_random_sentence, save_annotation
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
-import os
 from sentimentator.model import User
+from werkzeug.urls import url_parse
 
 
 app = Flask(__name__)
@@ -25,17 +25,30 @@ login_manager.login_view = 'login'
 
 init(app)
 
-class Config(object):
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'midnight-sun'
-
-
-app.config.from_object(Config)
 
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('SIGN IN')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('login'))
+        login_user(user)
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('index')
+        return redirect(next_page)
+    return render_template('login.html', title='SIGN IN', form=form)
 
 
 @app.route('/')
@@ -46,25 +59,6 @@ def index():
         return render_template('login.html')
     else:
         return render_template('index.html')
-
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return render_template('index.html')
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
-            return redirect(url_for('login'))
-        login_user(user)
-        next_page = request.args.get('next')
-        if not next_page or not next_page.startswith('/'):
-            next_page = url_for('index')
-        return redirect(next_page)
-
-    return render_template('login.html', title='SIGN IN', form=form)
 
 
 @app.route('/language')
@@ -96,11 +90,6 @@ def annotate(lang):
             app.logger.error(Message.INPUT_FINE)
     sen = get_random_sentence(lang)
     return render_template('annotate.html', lang=lang, sentence=sen)
-
-
-@login_manager.user_loader
-def load_user(id):
-    return User.query.get(int(id))
 
 
 @app.route('/logout')
