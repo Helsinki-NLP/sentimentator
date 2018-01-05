@@ -8,7 +8,6 @@ from flask_login import LoginManager, current_user, login_user, logout_user, log
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
-from sentimentator.model import User
 from werkzeug.urls import url_parse
 
 
@@ -18,13 +17,17 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'midnight-sun'
 
 
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login'
+login = LoginManager(app)
+#login.init_app(app)
+login.login_view = 'login'
+
+
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(id))
 
 
 init(app)
-
 
 
 class LoginForm(FlaskForm):
@@ -32,6 +35,7 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('SIGN IN')
 
+from sentimentator.model import User
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

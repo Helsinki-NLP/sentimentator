@@ -38,10 +38,9 @@
   </div>
 </div>
 <body>
-
 {% block content %}
     <div style="text-align: center;">
-    <h1>Sign In</h1>
+    <h1>SIGN IN</h1>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
@@ -58,14 +57,18 @@
             <span style="color: red;">{{ error }}</span>
             {% endfor %}
         </p>
-        <p style="">{{ form.submit() }}</p>
+        <p>{{ form.submit() }}</p>
         {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
+          {% if messages %}
+            <ul class=flashes>
             {% for message in messages %}
-            <li>{{ message }}</li>
+              <li>{{ message }}</li>
             {% endfor %}
-        </ul>
+            </ul>
+          {% endif %}
+        {% endwith %}
+        {% block body %}{% endblock %}
+
     </form>
     </div>
 {% endblock %}

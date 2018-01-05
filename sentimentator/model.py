@@ -4,11 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 db = SQLAlchemy()
-from sentimentator.app import login
-
-@login.user_loader
-def load_user(id):
-    return User.query.get(int(id))
 
 
 class Language(db.Model):
