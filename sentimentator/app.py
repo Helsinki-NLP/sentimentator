@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, flash, session, redirect, url
 
 from sentimentator.meta import Message, Status
 from sentimentator.database import init, get_random_sentence, save_annotation
-from flask_login import LoginManager, current_user, login_user, logout_user, login_required
+from flask_login import LoginManager, current_user, logout_user, login_required, login_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
@@ -17,8 +17,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'midnight-sun'
 
 
-login = LoginManager(app)
-#login.init_app(app)
+login = LoginManager()
+login.init_app(app)
+#hashed_password = login.hash_password(the_password)
 login.login_view = 'login'
 
 

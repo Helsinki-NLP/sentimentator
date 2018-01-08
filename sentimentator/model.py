@@ -30,12 +30,28 @@ class Tag(db.Model):
     sentence_id = db.Column(db.Integer, db.ForeignKey('sentence.id'))
 
 
-class User(UserMixin, db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
-    password = db.Column(db.String)
+    password_hash = db.Column(db.String)
     tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'))
+
+    def __init__(self, username, password):
+        self.username = username
+        self.password_hash = password
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return True
+
+    def get_id(self):
+        return self.id
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -45,3 +61,4 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+

@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from sentimentator.app import app
-from sentimentator.model import db, Language, Sentence
-
+from sentimentator.model import db, Language, Sentence, User
 
 DADA = {
     'en': [
@@ -32,6 +31,9 @@ DADA = {
 
 with app.app_context():
     db.create_all()
+    admin = User(username='admin', password='')
+    admin.set_password('admin')
+    db.session.add(admin)
     for i, lang in enumerate(DADA):
         db.session.add(Language(id=i, language=lang))
         for sentence in DADA[lang]:
