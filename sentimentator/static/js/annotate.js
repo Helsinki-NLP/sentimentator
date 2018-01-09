@@ -2,10 +2,18 @@
  * Hide and reveal user interface elements to create a nice UX flow.
  */
 
-function fineReveal() {
+function onCoarseClick() {
   var elem = document.querySelectorAll('#fine1, #fine2');
   Array.prototype.forEach.call(elem, function(e) {
     e.style.display = 'block';
+  });
+}
+
+function onNeutralClick() {
+  document.getElementById('submit').style.display = 'block';
+  var elem = document.querySelectorAll('#fine1, #fine2');
+  Array.prototype.forEach.call(elem, function(e) {
+    e.style.display = 'none';
   });
 }
 
@@ -20,10 +28,10 @@ function init() {
   var hidden = document.querySelectorAll('#fine1, #fine2, #submit');
 
   Array.prototype.forEach.call(coarse, function(e) {
-    e.onchange = fineReveal;
+    e.onchange = onCoarseClick;
   });
     Array.prototype.forEach.call(neutral, function(e) {
-    e.onchange = submitReveal;
+    e.onchange = onNeutralClick;
   });
   Array.prototype.forEach.call(fine, function(e) {
     e.onchange = submitReveal;
