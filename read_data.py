@@ -11,8 +11,6 @@ data = {
     'en': en_data,
 }
 
-print(en_data)
-
 with app.app_context():
     db.create_all()
     for i, lang in enumerate(data):
