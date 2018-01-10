@@ -8,9 +8,10 @@ with open('en.txt') as f:
     en_data = f.readlines()
 
 data = {
-    'en': [en_data]
+    'en': en_data,
 }
 
+print(en_data)
 
 with app.app_context():
     db.create_all()
