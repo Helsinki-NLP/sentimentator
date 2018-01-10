@@ -1,9 +1,8 @@
 import sqlite3
 import csv
-from sentimentator.model import *
 
-connect_db = sqlite3.connect('db.sqlite')
-output_file = open('en.csv', 'wb')
+connect_db = sqlite3.connect('sentimentator/db.sqlite')
+output_file = open('en.csv', 'w')
 output_csv = csv.writer(output_file)
 
 cursor = connect_db.execute('select * from sentence')
