@@ -21,12 +21,14 @@ class Sentence(db.Model):
     def __str__(self):
         return self.sentence
 
+    def get_id(self):
+        return self.id
 
-class Tag(db.Model):
-    __tablename__ = 'tag'
+
+class Annotation(db.Model):
+    __tablename__ = 'annotation'
     id = db.Column(db.Integer, primary_key=True)
-    pnn = db.Column(db.String)
-    sentiment = db.Column(db.String)
+    annotation = db.Column(db.String)
     sentence_id = db.Column(db.Integer, db.ForeignKey('sentence.id'))
 
 
@@ -35,7 +37,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
     password_hash = db.Column(db.String)
-    tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'))
+    annotation_id = db.Column(db.Integer, db.ForeignKey('annotation.id'))
 
     def __init__(self, username, password):
         self.username = username

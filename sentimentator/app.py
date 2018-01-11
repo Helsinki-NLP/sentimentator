@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, flash, session, redirect, url
 
 from sentimentator.meta import Message, Status
 from sentimentator.database import init, get_random_sentence, save_annotation
+from sentimentator.model import Sentence
 from flask_login import LoginManager, current_user, logout_user, login_required, login_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
@@ -38,43 +39,43 @@ class LoginForm(FlaskForm):
 
 from sentimentator.model import User
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
-            return redirect(url_for('login'))
-        login_user(user)
-        next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('index')
-        return redirect(next_page)
-    return render_template('login.html', title='SIGN IN', form=form)
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     if current_user.is_authenticated:
+#         return redirect(url_for('index'))
+#     form = LoginForm()
+#     if form.validate_on_submit():
+#         user = User.query.filter_by(username=form.username.data).first()
+#         if user is None or not user.check_password(form.password.data):
+#             flash('Invalid username or password')
+#             return redirect(url_for('login'))
+#         login_user(user)
+#         next_page = request.args.get('next')
+#         if not next_page or url_parse(next_page).netloc != '':
+#             next_page = url_for('index')
+#         return redirect(next_page)
+#     return render_template('login.html', title='SIGN IN', form=form)
 
 
 @app.route('/')
-@login_required
+#@login_required
 def index():
     """ Landing page """
-    if not session.get('logged_in'):
-        return render_template('login.html')
-    else:
-        return render_template('index.html')
+    #if not session.get('logged_in'):
+        #return render_template('login.html')
+    #else:
+    return render_template('index.html')
 
 
 @app.route('/language')
-@login_required
+#@login_required
 def language():
     """ Language selection page """
     return render_template('language.html')
 
 
 @app.route('/annotate/<lang>', methods=['GET', 'POST'])
-@login_required
+#@login_required
 def annotate(lang):
     """
     Annotation page
@@ -94,7 +95,8 @@ def annotate(lang):
         elif status == Status.ERR_FINE:
             app.logger.error(Message.INPUT_FINE)
     sen = get_random_sentence(lang)
-    return render_template('annotate.html', lang=lang, sentence=sen)
+    sen_id = sen.get_id()
+    return render_template('annotate.html', lang=lang, sentence=sen, sentence_id=sen_id)
 
 
 @app.route('/logout')

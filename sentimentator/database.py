@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from sqlalchemy.sql.expression import func
+from json import dumps
 
 from sentimentator.meta import Status
-from sentimentator.model import db, Language, Sentence, Tag, User
+from sentimentator.model import db, Language, Sentence, Annotation, User
 
 
 VALID_FINE_SENTIMENTS = ['ant', 'joy', 'sur', 'ang', 'fea', 'dis', 'tru', 'sad']
@@ -28,18 +29,16 @@ def _is_valid(fine):
     return fine in VALID_FINE_SENTIMENTS
 
 
-def _save(coarse, fine=None):
+def _save(sen_id, data):
     """
     Save validated sentiments to database
 
     coarse -- Coarse sentiment
     fine   -- A list of fine sentiments
     """
-    if fine is None:
-        db.session.add(Tag(pnn=coarse))
-    else:
-        for f in fine:
-            db.session.add(Tag(pnn=coarse, sentiment=f))
+    json = dumps(data)
+    annotation = Annotation(sentence_id=sen_id, annotation=json)
+    db.session.add(annotation)
     db.session.commit()
 
 
@@ -51,17 +50,24 @@ def save_annotation(req):
 
     Return Status object indicating the result of the validation.
     """
+    sen_id = req.form.get('sentence-id')
     coarse = req.form.get('sentiment')
     fine = req.form.getlist('fine-sentiment')
 
+    annotation = {
+        'coarse': coarse
+    }
+
     if coarse == 'neu':
-        _save('neu')
+        pass
     elif coarse in ['pos', 'neg']:
         if all([_is_valid(f) for f in fine]):
-            _save(coarse, fine)
+            annotation['fine'] = fine
         else:
             return Status.ERR_FINE
     else:
         return Status.ERR_COARSE
 
+    _save(sen_id, annotation)
     return Status.OK
+
