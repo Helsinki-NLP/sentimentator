@@ -95,8 +95,7 @@ def annotate(lang):
         elif status == Status.ERR_FINE:
             app.logger.error(Message.INPUT_FINE)
     sen = get_random_sentence(lang)
-    sen_id = sen.get_id()
-    return render_template('annotate.html', lang=lang, sentence=sen, sentence_id=sen_id)
+    return render_template('annotate.html', lang=lang, sentence=sen, sentence_id=sen.sid)
 
 
 @app.route('/logout')
