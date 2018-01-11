@@ -22,9 +22,8 @@ class Sentence(db.Model):
         return self.sentence
 
 
-class Tag(db.Model):
-    __tablename__ = 'tag'
+class Annotation(db.Model):
+    __tablename__ = 'annotation'
     id = db.Column(db.Integer, primary_key=True)
-    pnn = db.Column(db.String)
-    sentiment = db.Column(db.String)
+    annotation = db.Column(db.String)
     sentence_id = db.Column(db.Integer, db.ForeignKey('sentence.id'))
