@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, request, flash, session, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for
 
 from sentimentator.meta import Message, Status
 from sentimentator.database import init, get_random_sentence, save_annotation
@@ -8,7 +8,6 @@ from flask_login import LoginManager, current_user, logout_user, login_required,
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
-from werkzeug.urls import url_parse
 
 
 app = Flask(__name__)
@@ -35,7 +34,16 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('SIGN IN')
 
+
 from sentimentator.model import User
+
+@app.route('/')
+def index():
+    """ Landing page """
+    if current_user.is_authenticated:
+        return render_template('index.html')
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -48,29 +56,19 @@ def login():
             flash('Invalid username or password...')
             return redirect(url_for('login'))
         login_user(user)
-        return render_template('index.html', form=form)
+        return render_template('index.html')
     return render_template('login.html', title='SIGN IN', form=form)
 
 
-@app.route('/')
-#@login_required
-def index():
-    """ Landing page """
-    if not session.get('logged_in'):
-        return render_template('login.html')
-    else:
-        return render_template('index.html')
-
-
 @app.route('/language')
-#@login_required
+@login_required
 def language():
     """ Language selection page """
     return render_template('language.html')
 
 
 @app.route('/annotate/<lang>', methods=['GET', 'POST'])
-#@login_required
+@login_required
 def annotate(lang):
     """
     Annotation page
