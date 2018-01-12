@@ -41,9 +41,10 @@ class Annotation(db.Model):
     _sid = db.Column('sentence_id', db.Integer, db.ForeignKey('sentence.id'))
     _uid = db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
 
-    def __init__(self, annotation, sentence_id):
+    def __init__(self, annotation, sentence_id, user_id):
         self._annotation = annotation
         self._sid = sentence_id
+        self._uid = user_id
 
 
 class User(db.Model, UserMixin):
@@ -60,8 +61,9 @@ class User(db.Model, UserMixin):
     def user(self, username):
         self._user = username
 
-    def __init__(self, username):
+    def __init__(self, username, user_id):
         self._user = username
+        self._uid = user_id
 
     def is_authenticated(self):
         return True

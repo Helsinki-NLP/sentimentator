@@ -5,6 +5,7 @@ from json import dumps
 
 from sentimentator.meta import Status
 from sentimentator.model import db, Language, Sentence, Annotation, User
+from flask_login import current_user
 
 
 VALID_FINE_SENTIMENTS = ['ant', 'joy', 'sur', 'ang', 'fea', 'dis', 'tru', 'sad']
@@ -15,6 +16,12 @@ def init(app):
     db.init_app(app)
 
 
+def get_user():
+    if current_user.is_authenticated():
+        user_id = current_user._uid
+        return user_id
+
+
 def get_random_sentence(lang):
     """ Fetch a random sentence of given language """
     language = Language.query.filter_by(_language=lang).first()
@@ -23,17 +30,13 @@ def get_random_sentence(lang):
                    .order_by(func.random()) \
                    .first()
 
-def get_user():
-    form = LoginForm()
-    user = User.query.filter_by(_user=form.username.data).first()
-
 
 def _is_valid(fine):
     """ Return true if given argument is valid fine sentiment """
     return fine in VALID_FINE_SENTIMENTS
 
 
-def _save(sen_id, data):
+def _save(user_id, sen_id, data):
     """
     Save validated sentiments to database
 
@@ -41,7 +44,7 @@ def _save(sen_id, data):
     fine   -- A list of fine sentiments
     """
     json = dumps(data)
-    annotation = Annotation(sentence_id=sen_id, annotation=json)
+    annotation = Annotation(user_id=user_id, sentence_id=sen_id, annotation=json)
     db.session.add(annotation)
     db.session.commit()
 
@@ -54,6 +57,9 @@ def save_annotation(req):
 
     Return Status object indicating the result of the validation.
     """
+
+    user_id = get_user()
+
     sen_id = req.form.get('sentence-id')
     coarse = req.form.get('sentiment')
     fine = req.form.getlist('fine-sentiment')
@@ -72,6 +78,6 @@ def save_annotation(req):
     else:
         return Status.ERR_COARSE
 
-    _save(sen_id, annotation)
+    _save(user_id, sen_id, annotation)
     return Status.OK
 
