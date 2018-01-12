@@ -31,7 +31,7 @@ DADA = {
 
 with app.app_context():
     db.create_all()
-    admin = User(username='admin', password='')
+    admin = User(username='admin')
     admin.set_password('pulla')
     db.session.add(admin)
     for i, lang in enumerate(DADA):

@@ -60,9 +60,8 @@ class User(db.Model, UserMixin):
     def user(self, username):
         self._user = username
 
-    def __init__(self, username, password):
+    def __init__(self, username):
         self._user = username
-        self._pass = password
 
     def is_authenticated(self):
         return True

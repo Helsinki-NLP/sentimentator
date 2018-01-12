@@ -23,6 +23,10 @@ def get_random_sentence(lang):
                    .order_by(func.random()) \
                    .first()
 
+def get_user():
+    form = LoginForm()
+    user = User.query.filter_by(_user=form.username.data).first()
+
 
 def _is_valid(fine):
     """ Return true if given argument is valid fine sentiment """
