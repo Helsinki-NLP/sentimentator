@@ -4,7 +4,6 @@ from flask import Flask, render_template, request, flash, session, redirect, url
 
 from sentimentator.meta import Message, Status
 from sentimentator.database import init, get_random_sentence, save_annotation
-from sentimentator.model import Sentence
 from flask_login import LoginManager, current_user, logout_user, login_required, login_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
@@ -20,7 +19,6 @@ app.config['SECRET_KEY'] = 'midnight-sun'
 
 login = LoginManager()
 login.init_app(app)
-#hashed_password = login.hash_password(the_password)
 login.login_view = 'login'
 
 
@@ -39,32 +37,29 @@ class LoginForm(FlaskForm):
 
 from sentimentator.model import User
 
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
-#     if current_user.is_authenticated:
-#         return redirect(url_for('index'))
-#     form = LoginForm()
-#     if form.validate_on_submit():
-#         user = User.query.filter_by(username=form.username.data).first()
-#         if user is None or not user.check_password(form.password.data):
-#             flash('Invalid username or password')
-#             return redirect(url_for('login'))
-#         login_user(user)
-#         next_page = request.args.get('next')
-#         if not next_page or url_parse(next_page).netloc != '':
-#             next_page = url_for('index')
-#         return redirect(next_page)
-#     return render_template('login.html', title='SIGN IN', form=form)
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(_user=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password...')
+            return redirect(url_for('login'))
+        login_user(user)
+        return render_template('index.html', form=form)
+    return render_template('login.html', title='SIGN IN', form=form)
 
 
 @app.route('/')
 #@login_required
 def index():
     """ Landing page """
-    #if not session.get('logged_in'):
-        #return render_template('login.html')
-    #else:
-    return render_template('index.html')
+    if not session.get('logged_in'):
+        return render_template('login.html')
+    else:
+        return render_template('index.html')
 
 
 @app.route('/language')
@@ -101,4 +96,4 @@ def annotate(lang):
 @app.route('/logout')
 def logout():
     logout_user()
-    return render_template('login.html')
+    return redirect(url_for('login'))

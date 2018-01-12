@@ -41,7 +41,7 @@
 {% block content %}
     <div style="text-align: center;">
     <h1>SIGN IN</h1>
-    <form action="" method="post">
+    <form action="{{ url_for('login') }}" method="post" name="form">
         {{ form.hidden_tag() }}
         <p>
             {{ form.username.label }}<br>

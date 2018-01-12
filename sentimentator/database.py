@@ -17,9 +17,9 @@ def init(app):
 
 def get_random_sentence(lang):
     """ Fetch a random sentence of given language """
-    language = Language.query.filter_by(language=lang).first()
+    language = Language.query.filter_by(_language=lang).first()
     return Sentence.query \
-                   .filter_by(language_id=language.id) \
+                   .filter_by(_lid=language._lid) \
                    .order_by(func.random()) \
                    .first()
 

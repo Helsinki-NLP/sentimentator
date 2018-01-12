@@ -31,7 +31,7 @@ class Sentence(db.Model):
         return self._sid
 
     def __str__(self):
-        return self.sentence
+        return self._sentence
 
 
 class Annotation(db.Model):
@@ -74,7 +74,7 @@ class User(db.Model, UserMixin):
         return True
 
     def get_id(self):
-        return self.id
+        return self._uid
 
     # def __repr__(self):
     #     return '<User {}>'.format(self._user)
