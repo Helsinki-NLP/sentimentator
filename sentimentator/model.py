@@ -26,6 +26,7 @@ class Sentence(db.Model):
         self._sentence = sentence
         self._lid = language_id
 
+        
     @property
     def sid(self):
         return self._sid
@@ -76,12 +77,8 @@ class User(db.Model, UserMixin):
     def get_id(self):
         return self._uid
 
-    # def __repr__(self):
-    #     return '<User {}>'.format(self._user)
-
     def set_password(self, password):
         self._pass = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self._pass, password)
-
