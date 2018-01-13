@@ -44,6 +44,8 @@
 
 <div class="row" style="text-align: center">
   <p class="info">Select the emotions which you think best suit the sentence.</p>
+  <input type="hidden" name="sentence-id" value="{{ sentence_id }}">
+  <input type="hidden" name="user-id" value="{{ user_id }}">
   <p class="sentence" style="font-size: larger"><b>{{ sentence }}</b></p>
 </div>
 
@@ -114,9 +116,12 @@
 
 <div class="row divide">
 <figure style="text-align: center">
-<img src="/static/images/Plutchik_Wheel.png">
-<figcaption><a href="https://en.wikipedia.org/wiki/Contrasting_and_categorization_of_emotions">Plutchik's wheel of emotions.</a></figcaption>
+  <img src="/static/images/Plutchik_Wheel.png">
+  <figcaption><a href="https://en.wikipedia.org/wiki/Contrasting_and_categorization_of_emotions">Plutchik's wheel of emotions.</a></figcaption>
 </figure>
+<div class="six columns offset-by-three" style="text-align: center">
+  <a href="/logout" class="button">LOG OUT</a>
+</div>
 </div>
 
 </div>

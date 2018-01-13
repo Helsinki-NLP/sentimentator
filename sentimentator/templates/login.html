@@ -30,16 +30,47 @@
 
 </head>
 
-<header>
-  <div class="container">
-    <div class="row">
-      <div class="one-half column" style="margin-top: 25%">
-      <h2>You are now logged out. Let's continue later!</h2>
-	  </div>
-	</div>
+<div class="container" style="text-align: center">
+  <div class="row" style="margin-top: 10%">
+    <h1>SENTIMENTATOR</h1>
+    <div class="six columns offset-by-three" style="text-align: center">
+    </div>
   </div>
-</header>
+</div>
+<body>
+{% block content %}
+    <div style="text-align: center;">
+    <h1>SIGN IN</h1>
+    <form action="{{ url_for('login') }}" method="post" name="form">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.username.label }}<br>
+            {{ form.username(size=40) }}<br>
+            {% for error in form.username.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size=40) }}<br>
+            {% for error in form.password.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+        {% block body %}{% endblock %}
 
-<!-- End Document
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    </form>
+    </div>
+{% endblock %}
+</body>
 </html>

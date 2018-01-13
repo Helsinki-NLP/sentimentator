@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from sqlalchemy.sql.expression import func
+from json import dumps
 
 from sentimentator.meta import Status
-from sentimentator.model import db, Language, Sentence, Tag
+from sentimentator.model import db, Language, Sentence, Annotation, User
+from flask_login import current_user
 
 
 VALID_FINE_SENTIMENTS = ['ant', 'joy', 'sur', 'ang', 'fea', 'dis', 'tru', 'sad']
@@ -14,11 +16,17 @@ def init(app):
     db.init_app(app)
 
 
+def get_user():
+    if current_user.is_authenticated():
+        user_id = current_user._uid
+        return user_id
+
+
 def get_random_sentence(lang):
     """ Fetch a random sentence of given language """
-    language = Language.query.filter_by(language=lang).first()
+    language = Language.query.filter_by(_language=lang).first()
     return Sentence.query \
-                   .filter_by(language_id=language.id) \
+                   .filter_by(_lid=language._lid) \
                    .order_by(func.random()) \
                    .first()
 
@@ -28,18 +36,16 @@ def _is_valid(fine):
     return fine in VALID_FINE_SENTIMENTS
 
 
-def _save(coarse, fine=None):
+def _save(user_id, sen_id, data):
     """
     Save validated sentiments to database
 
     coarse -- Coarse sentiment
     fine   -- A list of fine sentiments
     """
-    if fine is None:
-        db.session.add(Tag(pnn=coarse))
-    else:
-        for f in fine:
-            db.session.add(Tag(pnn=coarse, sentiment=f))
+    json = dumps(data)
+    annotation = Annotation(user_id=user_id, sentence_id=sen_id, annotation=json)
+    db.session.add(annotation)
     db.session.commit()
 
 
@@ -51,17 +57,27 @@ def save_annotation(req):
 
     Return Status object indicating the result of the validation.
     """
+
+    user_id = get_user()
+
+    sen_id = req.form.get('sentence-id')
     coarse = req.form.get('sentiment')
     fine = req.form.getlist('fine-sentiment')
 
+    annotation = {
+        'coarse': coarse
+    }
+
     if coarse == 'neu':
-        _save('neu')
+        pass
     elif coarse in ['pos', 'neg']:
         if all([_is_valid(f) for f in fine]):
-            _save(coarse, fine)
+            annotation['fine'] = fine
         else:
             return Status.ERR_FINE
     else:
         return Status.ERR_COARSE
 
+    _save(user_id, sen_id, annotation)
     return Status.OK
+
