@@ -20,13 +20,16 @@ class Sentence(db.Model):
     __tablename__ = 'sentence'
     _sid = db.Column('id', db.Integer, primary_key=True)
     _sentence = db.Column('sentence', db.String)
-    _lid = db.Column('language_id', db.Integer, db.ForeignKey('language.id'))
+    _lang_id = db.Column('language_id', db.Integer, db.ForeignKey('language.id'))
+    _opus_did = db.Column('opus_did', db.String)
+    _opus_sid = db.Column('opus_sid', db.String)
 
-    def __init__(self, sentence, language_id):
+    def __init__(self, sentence, language_id, opus_did, opus_sid):
         self._sentence = sentence
-        self._lid = language_id
+        self._lang_id = language_id
+        self._opus_did = opus_did
+        self._opus_sid = opus_sid
 
-        
     @property
     def sid(self):
         return self._sid
