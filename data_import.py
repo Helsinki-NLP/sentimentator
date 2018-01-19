@@ -2,16 +2,16 @@
 # -*- coding: utf-8 -*-
 
 from sentimentator.app import app
-from sentimentator.model import db, Language, Sentence
+from sentimentator.model import db, Language, Sentence, User
 
 lang_en = []
 
-with open('en.txt') as Sentences, open('en-ids.txt') as Ids:
-    for s, i in zip(Sentences, Ids):
+with open('en.txt') as Sentences_en, open('ids.txt') as Ids:
+    for s, i in zip(Sentences_en, Ids):
         lang_en.append([s] + i.split())
 
 # example lang_en = [
-#   ['sentense', 'en/...', 'fi/...', '1', '1'],
+#   ['sentence', 'en/...', 'fi/...', '1', '1'],
 #   [...]
 # ]
 
