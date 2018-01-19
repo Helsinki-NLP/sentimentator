@@ -23,9 +23,11 @@ def read_file(sentences_fn, alignment_fn):
 def init_db():
     with app.app_context():
         db.create_all()
-        admin = User(username='admin')
-        admin.set_password('pulla')
-        db.session.add(admin)
+        admin = User.query.filter_by(_user='admin').first()
+        if admin is None:
+            db.session.add(User(username='admin'))
+        else:
+            admin.set_password('pulla')
         db.session.commit()
 
 

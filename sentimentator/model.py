@@ -55,6 +55,8 @@ class Annotation(db.Model):
         self._sid = sentence_id
         self._uid = user_id
 
+db.Index('ix_annotation_lookup', Annotation._sid, Annotation._uid)
+
 
 class Document(db.Model):
     __tablename__ = 'document'
