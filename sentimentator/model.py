@@ -31,6 +31,7 @@ class Sentence(db.Model):
         self._opus_did = opus_document_id
         self._opus_sid = opus_sentence_id
 
+
     @property
     def sid(self):
         return self._sid
