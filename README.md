@@ -22,6 +22,7 @@ Or if you wish to receive logs to your terminal:
 #### Test data
 
 Initially the database is empty. You can populate it with test data by
-executing database initiation script in a running container:
+executing the database initiation script in a running container (make sure the file
+paths in the import script are pointing to correct data files on your local machine):
 
-    docker exec -it <container_name> python /app/init_db.py
+    docker exec -it <container_name> python /app/data_import.py
