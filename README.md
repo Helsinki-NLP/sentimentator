@@ -25,4 +25,4 @@ Initially the database is empty. You can populate it with test data by
 executing the database initiation script in a running container (make sure the file
 paths in the import script are pointing to correct data files on your local machine):
 
-    docker exec -it <container_name> python /app/data_import.py
+    docker exec -it <container_name> python /app/data_import.py <lang_name> <lang_filename> <alignment_filename>
