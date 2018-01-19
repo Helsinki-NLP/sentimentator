@@ -3,6 +3,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+
 db = SQLAlchemy()
 
 
@@ -21,12 +22,15 @@ class Sentence(db.Model):
     _sid = db.Column('id', db.Integer, primary_key=True)
     _sentence = db.Column('sentence', db.String)
     _lid = db.Column('language_id', db.Integer, db.ForeignKey('language.id'))
+    _opus_sid = db.Column('opus_sentence_id', db.Integer)
+    _opus_did = db.Column('opus_document_id', db.Integer)
 
-    def __init__(self, sentence, language_id):
+    def __init__(self, sentence, language_id, opus_document_id, opus_sentence_id):
         self._sentence = sentence
         self._lid = language_id
+        self._opus_did = opus_document_id
+        self._opus_sid = opus_sentence_id
 
-        
     @property
     def sid(self):
         return self._sid
@@ -38,7 +42,7 @@ class Sentence(db.Model):
 class Annotation(db.Model):
     __tablename__ = 'annotation'
     _aid = db.Column('id', db.Integer, primary_key=True)
-    _annotation = db.Column(db.String)
+    _annotation = db.Column('annotation', db.String)
     _sid = db.Column('sentence_id', db.Integer, db.ForeignKey('sentence.id'))
     _uid = db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
 
@@ -46,6 +50,21 @@ class Annotation(db.Model):
         self._annotation = annotation
         self._sid = sentence_id
         self._uid = user_id
+
+
+class Document(db.Model):
+    __tablename__ = 'document'
+    _did = db.Column('id', db.Integer, primary_key=True)
+    _document = db.Column('document', db.String)
+
+
+class Alignment(db.Model):
+    __tablename__ = 'alignment'
+    _lid = db.Column('language_id', db.Integer, db.ForeignKey('language.id'))
+    _did = db.Column('document_id', db.Integer, db.ForeignKey('document.id'))
+    _sid = db.Column('sentence_id', db.Integer, db.ForeignKey('sentence.id'))
+
+db.Index('ix_alignment_lookup', Alignment._lid, Alignment._did, Alignment._sid)
 
 
 class User(db.Model, UserMixin):
