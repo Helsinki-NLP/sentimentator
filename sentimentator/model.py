@@ -12,9 +12,13 @@ class Language(db.Model):
     _lid = db.Column('id', db.Integer, primary_key=True)
     _language = db.Column('language', db.String)
 
-    def __init__(self, id, language):
-        self._lid = id
+    def __init__(self, language):
+        #self._lid = id
         self._language = language
+
+    @property
+    def lid(self):
+        return self._lid
 
 
 class Sentence(db.Model):
@@ -30,7 +34,6 @@ class Sentence(db.Model):
         self._lid = language_id
         self._opus_did = opus_did
         self._opus_sid = opus_sid
-
 
     @property
     def sid(self):
