@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+# TODO: Import script with metadata for additional languages
+
 from sentimentator.app import app
 from sentimentator.model import db, Language, Sentence, User
 from argparse import ArgumentParser
