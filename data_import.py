@@ -5,7 +5,7 @@ from sentimentator.app import app
 from sentimentator.model import db, Language, Sentence, User
 from argparse import ArgumentParser
 
-
+# Read the sentences, sentence ids and document ids, return list
 def read_file(sentences_fn, alignment_fn):
     lang_data = []
     with open(sentences_fn) as Sentences, open(alignment_fn) as Alignments:
@@ -19,16 +19,19 @@ def read_file(sentences_fn, alignment_fn):
 #   [...]
 # ]
 
-
+# Create database with dummy admin user
 def init_db():
     with app.app_context():
         db.create_all()
-        admin = User(username='admin')
-        admin.set_password('pulla')
-        db.session.add(admin)
+        admin = User.query.filter_by(_user='admin').first()
+        if admin is None:
+            db.session.add(User(username='admin'))
+        else:
+            admin.set_password('flyingtiger')
         db.session.commit()
 
-
+# Function to check if the language exists in database
+# If not, add it
 def ensure_language(lang):
     with app.app_context():
         language = Language.query.filter_by(_language=lang).first()
@@ -39,7 +42,7 @@ def ensure_language(lang):
         else:
             return language.lid
 
-
+# Import sentences and metadata for given language
 def import_data(lang, lang_data):
     with app.app_context():
         language_id = ensure_language(lang)

@@ -39,14 +39,22 @@ from sentimentator.model import User
 
 @app.route('/')
 def index():
-    """ Landing page """
+    """
+    Check if user is authenticated and render index page
+    Or login page
+    """
     if current_user.is_authenticated:
         return render_template('index.html')
     else:
         return redirect(url_for('login'))
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """"
+    Login page
+    If user is already authenticated render index page
+    """
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()

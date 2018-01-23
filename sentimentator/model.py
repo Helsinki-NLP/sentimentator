@@ -26,8 +26,8 @@ class Sentence(db.Model):
     _sid = db.Column('id', db.Integer, primary_key=True)
     _sentence = db.Column('sentence', db.String)
     _lid = db.Column('language_id', db.Integer, db.ForeignKey('language.id'))
-    _opus_sid = db.Column('opus_did', db.Integer)
-    _opus_did = db.Column('opus_sid', db.Integer)
+    _opus_sid = db.Column('opus_sid', db.Integer)
+    _opus_did = db.Column('opus_did', db.String)
 
     def __init__(self, sentence, language_id, opus_did, opus_sid):
         self._sentence = sentence
@@ -54,6 +54,8 @@ class Annotation(db.Model):
         self._annotation = annotation
         self._sid = sentence_id
         self._uid = user_id
+
+db.Index('ix_annotation_lookup', Annotation._sid, Annotation._uid)
 
 
 class Document(db.Model):
