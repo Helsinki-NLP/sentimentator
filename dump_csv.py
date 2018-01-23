@@ -1,7 +1,7 @@
+# Skeleton for CSV dump script
+
 import sqlite3
 import csv
-
-import pandas
 
 connect_db = sqlite3.connect('sentimentator/db.sqlite')
 output_file = open('en.csv', 'w')
