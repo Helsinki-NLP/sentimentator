@@ -34,6 +34,7 @@ def init_db():
 
 # Function to check if the language exists in database
 # If not, add it
+# TODO: Restrict and validate possible language code
 def ensure_language(lang):
     with app.app_context():
         language = Language.query.filter_by(_language=lang).first()
