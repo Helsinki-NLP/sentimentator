@@ -28,7 +28,9 @@ Usage:
     docker exec -it <container_name> python /app/data_import.py <lang_name> <lang_filename> <alignment_filename>
 
 **<lang_name>**: two-letter language code, for example *en*, *fi*, or *sv*.
+
 **<lang_filename>**: name of the .txt file from which to import each line as a sentence to the database.
+
 **<alignment_filename>**: name of the .txt file from which to import the OPUS metadata for each sentence. The *data_import.py* script imports metadata for a pivot language by extracting the sentence id and the path to the OPUS document id for each sentence from the parallel line in the alignment file.
 Example alignment file:
 
