@@ -64,6 +64,7 @@ def main():
     import argparse
     parser = ArgumentParser()
 
+    # Validate language code argument
     def check_arg(l, pattern=re.compile(r'^[a-zA-Z]{2}$')):
         if not pattern.match(l):
             raise argparse.ArgumentTypeError('Use a two-character alphabetic language code.')
