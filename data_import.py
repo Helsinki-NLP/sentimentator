@@ -6,6 +6,7 @@
 from sentimentator.app import app
 from sentimentator.model import db, Language, Sentence, User
 from argparse import ArgumentParser
+import re
 
 # Read the sentences, sentence ids and document ids, return list
 def read_file(sentences_fn, alignment_fn):
@@ -34,7 +35,6 @@ def init_db():
 
 # Function to check if the language exists in database
 # If not, add it
-# TODO: Restrict and validate possible language code
 def ensure_language(lang):
     with app.app_context():
         language = Language.query.filter_by(_language=lang).first()
@@ -61,9 +61,16 @@ def import_data(lang, lang_data):
 
 def main():
 
+    import argparse
     parser = ArgumentParser()
 
-    parser.add_argument('LANG', help='')
+    # Validate language code argument
+    def check_arg(l, pattern=re.compile(r'^[a-zA-Z]{2}$')):
+        if not pattern.match(l):
+            raise argparse.ArgumentTypeError('Use a two-character alphabetic language code.')
+        return l
+
+    parser.add_argument('LANG', help='', type=check_arg)
     parser.add_argument('SENTENCES', help='')
     parser.add_argument('ALIGNMENTS', help='')
     args = parser.parse_args()
