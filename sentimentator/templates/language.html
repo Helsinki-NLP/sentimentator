@@ -52,6 +52,15 @@
         <a class="button" href="/annotate/fr">français</a>
       </div>
     </div>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li><b>{{ message }}</b></li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
     <div>
 	  <figure style="text-align: center">
 	    <img src="/static/images/Plutchik_Wheel.png">

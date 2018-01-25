@@ -6,7 +6,6 @@ from json import dumps
 from sentimentator.meta import Status
 from sentimentator.model import db, Language, Sentence, Annotation, User
 from flask_login import current_user
-from flask import session
 
 
 VALID_FINE_SENTIMENTS = ['ant', 'joy', 'sur', 'ang', 'fea', 'dis', 'tru', 'sad']
@@ -41,7 +40,10 @@ def get_score():
 def get_random_sentence(lang):
     """ Fetch a random sentence of given language """
     language = Language.query.filter_by(_language=lang).first()
-    return Sentence.query \
+    if language is None:
+        return None
+    else:
+        return Sentence.query \
                    .filter_by(_lid=language._lid) \
                    .order_by(func.random()) \
                    .first()

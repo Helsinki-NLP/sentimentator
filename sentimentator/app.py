@@ -92,18 +92,22 @@ def annotate(lang):
     A sensible use case should not allow invalid input, thus error messages
     are not displayed to user, but logged instead.
     """
-    score = get_score()
-    username = get_username()
-    if request.method == 'POST':
-        status = save_annotation(request)
-        score += 1
-        if status == Status.ERR_COARSE:
-            app.logger.error(Message.INPUT_COARSE)
-        elif status == Status.ERR_FINE:
-            app.logger.error(Message.INPUT_FINE)
-    else:
-        pass
     sen = get_random_sentence(lang)
+    score = get_score()
+    if sen is None:
+        flash('There are no sentences for the selected language!')
+        return redirect(url_for('language', score=score, username=get_username()))
+    else:
+        username = get_username()
+        if request.method == 'POST':
+            status = save_annotation(request)
+            score += 1
+            if status == Status.ERR_COARSE:
+                app.logger.error(Message.INPUT_COARSE)
+            elif status == Status.ERR_FINE:
+                app.logger.error(Message.INPUT_FINE)
+        else:
+            pass
     return render_template('annotate.html', lang=lang, sentence=sen, sentence_id=sen.sid, score=score, username=username)
 
 
