@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
+# Skip button
+# username + score display on annotation page
+
 from flask import Flask, render_template, request, flash, redirect, url_for
 
 from sentimentator.meta import Message, Status
-from sentimentator.database import init, get_random_sentence, save_annotation
+from sentimentator.database import init, get_random_sentence, save_annotation, get_score, get_username
 from flask_login import LoginManager, current_user, logout_user, login_required, login_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
@@ -44,7 +47,7 @@ def index():
     Or login page
     """
     if current_user.is_authenticated:
-        return render_template('index.html')
+        return render_template('index.html', score=get_score(), username=get_username())
     else:
         return redirect(url_for('login'))
 
@@ -64,7 +67,7 @@ def login():
             flash('Invalid username or password...')
             return redirect(url_for('login'))
         login_user(user)
-        return render_template('index.html')
+        return render_template('index.html', score=get_score(), username=get_username())
     return render_template('login.html', title='SIGN IN', form=form)
 
 
@@ -72,7 +75,7 @@ def login():
 @login_required
 def language():
     """ Language selection page """
-    return render_template('language.html')
+    return render_template('language.html', score=get_score(), username=get_username())
 
 
 @app.route('/annotate/<lang>', methods=['GET', 'POST'])
@@ -89,14 +92,23 @@ def annotate(lang):
     A sensible use case should not allow invalid input, thus error messages
     are not displayed to user, but logged instead.
     """
-    if request.method == 'POST':
-        status = save_annotation(request)
-        if status == Status.ERR_COARSE:
-            app.logger.error(Message.INPUT_COARSE)
-        elif status == Status.ERR_FINE:
-            app.logger.error(Message.INPUT_FINE)
     sen = get_random_sentence(lang)
-    return render_template('annotate.html', lang=lang, sentence=sen, sentence_id=sen.sid)
+    score = get_score()
+    if sen is None:
+        flash('There are no sentences for the selected language!')
+        return redirect(url_for('language', score=score, username=get_username()))
+    else:
+        username = get_username()
+        if request.method == 'POST':
+            status = save_annotation(request)
+            score += 1
+            if status == Status.ERR_COARSE:
+                app.logger.error(Message.INPUT_COARSE)
+            elif status == Status.ERR_FINE:
+                app.logger.error(Message.INPUT_FINE)
+        else:
+            pass
+    return render_template('annotate.html', lang=lang, sentence=sen, sentence_id=sen.sid, score=score, username=username)
 
 
 @app.route('/logout')

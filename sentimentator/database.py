@@ -17,15 +17,33 @@ def init(app):
 
 
 def get_user():
+    """ Get id of logged-in user """
     if current_user.is_authenticated():
         user_id = current_user._uid
         return user_id
 
 
+def get_username():
+    if current_user.is_authenticated():
+        username = current_user.user
+        return username
+
+
+def get_score():
+    """ Get annotation score by returning amount of annotations for logged-in user """
+    if current_user.is_authenticated():
+        user_id = current_user._uid
+        number_of_annotations = db.session.query(Annotation).filter_by(_uid=user_id).count()
+        return number_of_annotations
+
+
 def get_random_sentence(lang):
     """ Fetch a random sentence of given language """
     language = Language.query.filter_by(_language=lang).first()
-    return Sentence.query \
+    if language is None:
+        return None
+    else:
+        return Sentence.query \
                    .filter_by(_lid=language._lid) \
                    .order_by(func.random()) \
                    .first()
@@ -80,4 +98,3 @@ def save_annotation(req):
 
     _save(user_id, sen_id, annotation)
     return Status.OK
-
