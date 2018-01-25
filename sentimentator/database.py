@@ -6,6 +6,7 @@ from json import dumps
 from sentimentator.meta import Status
 from sentimentator.model import db, Language, Sentence, Annotation, User
 from flask_login import current_user
+from flask import session
 
 
 VALID_FINE_SENTIMENTS = ['ant', 'joy', 'sur', 'ang', 'fea', 'dis', 'tru', 'sad']
@@ -17,9 +18,24 @@ def init(app):
 
 
 def get_user():
+    """ Get id of logged-in user """
     if current_user.is_authenticated():
         user_id = current_user._uid
         return user_id
+
+
+def get_username():
+    if current_user.is_authenticated():
+        username = current_user.user
+        return username
+
+
+def get_score():
+    """ Get annotation score by returning amount of annotations for logged-in user """
+    if current_user.is_authenticated():
+        user_id = current_user._uid
+        number_of_annotations = db.session.query(Annotation).filter_by(_uid=user_id).count()
+        return number_of_annotations
 
 
 def get_random_sentence(lang):
@@ -80,4 +96,3 @@ def save_annotation(req):
 
     _save(user_id, sen_id, annotation)
     return Status.OK
-
