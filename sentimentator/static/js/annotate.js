@@ -31,6 +31,7 @@ function init() {
   Array.prototype.forEach.call(posneg, function(e) {
     e.onchange = function() {
       fineToggle('block');
+      submitReveal();
     }
   });
   Array.prototype.forEach.call(neutral, function(e) {
@@ -39,9 +40,9 @@ function init() {
       submitReveal();
     }
   });
-  Array.prototype.forEach.call(fine, function(e) {
-    e.onchange = submitReveal;
-  });
+  // Array.prototype.forEach.call(fine, function(e) {
+  //   e.onchange = submitReveal;
+  // });
 
   /* Hide fine sentiments and submit button
    */
