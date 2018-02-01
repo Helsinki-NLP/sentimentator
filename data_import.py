@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# TODO: Import script with metadata for additional languages
-
 from sentimentator.app import app
-from sentimentator.model import db, Language, Sentence, User
+from sentimentator.model import db, Language, Sentence, User, Alignment, Document
 from argparse import ArgumentParser
 import re
 
@@ -17,7 +15,7 @@ def read_file(sentences_fn, alignment_fn):
     return lang_data
 
 
-# example lang_en = [
+# example lang_data = [
 #   ['sentence', 'en/...', 'fi/...', '1', '1'],
 #   [...]
 # ]
@@ -45,7 +43,20 @@ def ensure_language(lang):
         else:
             return language.lid
 
-# Import sentences and metadata for given language
+# Import pivot language (en) sentences and metadata
+def import_pivot(lang, lang_data):
+    with app.app_context():
+        language_id = ensure_language(lang)
+        for i in lang_data:
+            db.session.add(Sentence(
+                sentence=i[0],
+                    language_id=language_id,
+                    opus_did=i[1],
+                    opus_sid=i[3]))
+
+        db.session.commit()
+
+# Import non-pivot language sentences and metadata
 def import_data(lang, lang_data):
     with app.app_context():
         language_id = ensure_language(lang)
@@ -53,8 +64,8 @@ def import_data(lang, lang_data):
             db.session.add(Sentence(
                 sentence=i[0],
                 language_id=language_id,
-                opus_did=i[1],
-                opus_sid=i[3]))
+                opus_did=i[2],
+                opus_sid=i[4]))
 
         db.session.commit()
 
@@ -76,7 +87,10 @@ def main():
     args = parser.parse_args()
     init_db()
     lang_data = read_file(args.SENTENCES, args.ALIGNMENTS)
-    import_data(args.LANG, lang_data)
+    if args.LANG == 'en': # In this case the pivot language is English
+        import_pivot(args.LANG, lang_data)
+    else:
+        import_data(args.LANG, lang_data)
 
 
 if __name__ == "__main__":

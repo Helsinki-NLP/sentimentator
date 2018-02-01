@@ -31,12 +31,12 @@
 </head>
 <div class="container">
   <div class="row" style="text-align: right; margin-top: 5%">
-    <p class="username" style="font-size: larger">Logged in as: <b>{{ username }}</b></p>
-    <p class="score" style="font-size: x-large; color: green">SCORE: <b>{{ score }}</b></p>
+    <p style="font-size: larger">Logged in as: <b>{{ username }}</b></p>
+    <p style="font-size: x-large; color: green">SCORE: <b>{{ score }}</b></p>
   </div>
 </div>
 <div class="container" style="text-align: center">
-  <div class="row" style="margin-top: 10%">
+  <div class="row">
     <h1>SENTIMENTATOR</h1>
     <div class="six columns offset-by-three" style="text-align: center">
       <a href="/language" class="button button-primary">START ANNOTATING</a>
@@ -58,7 +58,7 @@
         <img src="/static/images/Plutchik_Wheel.png">
         <figcaption><a href="https://en.wikipedia.org/wiki/Contrasting_and_categorization_of_emotions">Plutchik's wheel of emotions.</a></figcaption>
       </figure>
-      <div class="six columns offset-by-three" style="text-align: center">
+      <div class="six columns offset-by-three" style="text-align: center; margin-bottom: 5%">
         <a href="{{ url_for('logout') }}" class="button">LOG OUT</a>
       </div>
     </div>
