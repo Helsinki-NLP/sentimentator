@@ -54,4 +54,6 @@ Example alignment file:
     python3 data_import.py en data/en/en.txt data/en/en.ids
 
 OPUS parallel corpus files are available for download at http://opus.nlpl.eu/OpenSubtitles2018.php in the MOSES/GIZA++ format.
-The demo dataset used in this project is taken from the OPUS corpus as presented in this paper: P. Lison and J. Tiedemann, 2016, OpenSubtitles2016: Extracting Large Parallel Corpora from Movie and TV Subtitles. In Proceedings of the 10th International Conference on Language Resources and Evaluation (LREC 2016).
+
+The demo dataset used in this project is taken from the OPUS corpus as presented in this paper:
+**P. Lison and J. Tiedemann, 2016, OpenSubtitles2016: Extracting Large Parallel Corpora from Movie and TV Subtitles. In Proceedings of the 10th International Conference on Language Resources and Evaluation (LREC 2016).**
