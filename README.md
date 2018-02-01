@@ -10,22 +10,32 @@ sets for machine learning tasks.
 ### With docker
 
 Getting *sentimentator* up and running should be straightforward with Docker.
-After building the image, run it and expose port 5000. Example assumes your
-image is called `sentimentator`:
+In your file system, navigate to the sentimentator directory. On the command line, build the Docker image:
+    
+    docker build -f Dockerfile -t sentimentator .
+
+After building the image, run that image and expose port 5000. This example assumes your
+image is called `sentimentator`. Run:
 
     docker run -d -p 5000:5000 sentimentator
 
-Or if you wish to receive logs to your terminal:
+to run a container, or:
 
-    docker run -it --rm -p 5000:5000 sentimentator
+    docker run -it --rm -p 5000:5000 -v $(pwd):/app --name sentimentator sentimentator
+    
+to run a container and use a shell inside the container. To use the shell, open another command line window and run:
 
-#### Test data
+    docker exec -it sentimentator <editor_name>
 
-Initially the database is empty. You can populate it with test data by
-executing the database initiation script in a running container.
+and navigate to localhost:5000 on a Web browser.
+
+#### Demo data
+
+Initially the database is empty. You can populate it with demo data by
+executing the database initialization script in a running Docker container.
 Usage:
 
-    docker exec -it <container_name> python /app/data_import.py <lang_name> <lang_filename> <alignment_filename>
+    docker exec -it <container_name> python3 data_import.py <lang_name> <lang_filename> <alignment_filename>
 
 **<lang_name>**: two-letter language code, for example *en*, *fi*, or *sv*.
 
@@ -38,5 +48,10 @@ Example alignment file:
     # en/0/3509138/6031634.xml.gz	fi/0/3509138/6003289.xml.gz	6	4
     # en/0/3509138/6031634.xml.gz	fi/0/3509138/6003289.xml.gz	9	6
     [...]
+    
+ For example, to import English, in a shell inside a running container run:
+
+    python3 data_import.py en data/en/en.txt data/en/en.ids
 
 OPUS parallel corpus files are available for download at http://opus.nlpl.eu/OpenSubtitles2018.php in the MOSES/GIZA++ format.
+The demo dataset used in this project is taken from the OPUS corpus as presented in this paper: P. Lison and J. Tiedemann, 2016, OpenSubtitles2016: Extracting Large Parallel Corpora from Movie and TV Subtitles. In Proceedings of the 10th International Conference on Language Resources and Evaluation (LREC 2016).
