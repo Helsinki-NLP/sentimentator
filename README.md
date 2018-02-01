@@ -33,9 +33,9 @@ and navigate to localhost:5000 on a Web browser.
 
 Initially the database is empty. You can populate it with demo data by
 executing the database initialization script in a running Docker container.
-Usage:
+In a shell run:
 
-    docker exec -it <container_name> python3 data_import.py <lang_name> <lang_filename> <alignment_filename>
+    python3 data_import.py <lang_name> <lang_filename> <alignment_filename>
 
 **<lang_name>**: two-letter language code, for example *en*, *fi*, or *sv*.
 
