@@ -6,7 +6,6 @@
 
 h1 {
     letter-spacing: 10px;
-    padding-bottom: 40px;
     text-align: center;
 }
 
@@ -31,26 +30,151 @@ div.divide {
     border-color: #4670ba;
 }
 
+.button.button-pos {
+    background-color: #90C590;
+    border-color: #90C590;
+    text-align: center;
+}
+
+.button.button-pos:hover {
+    background-color: green;
+    border-color: green;
+    color: whitesmoke;
+}
+
+.button.button-neg {
+    background-color: #FF7F7F;
+    border-color: #FF7F7F;
+    text-align: center;
+}
+
+.button.button-neg:hover {
+    background-color: red;
+    border-color: red;
+    color: whitesmoke;
+}
+
+.button.button-neu {
+    background-color: lightgrey;
+    border-color: lightgrey;
+    text-align: center;
+}
+
+.button.button-neu:hover {
+    background-color: #545454;
+    border-color: #545454;
+    color: whitesmoke;
+}
+
 input[type="radio"], input[type="checkbox"] {
     display: none;
 }
 
-input[type="radio"]:checked + label {
-    background-color: #4670ba;
-    border-color: #1a2e54;
+input[id="pos"]:checked + label {
+    background-color: darkgreen;
+    border-color: darkgreen;
+    color: whitesmoke;
 }
 
-input[type="checkbox"]:checked + label {
+input[id="neut"]:checked + label {
+    background-color: #545454;
+    border-color: #545454;
+    color: whitesmoke;
+}
+
+input[id="neg"]:checked + label {
+    background-color: red;
+    border-color: red;
+    color: whitesmoke;
+}
+
+input[id="ant"] {
     border-color: #888;
-    background-color: #eee;
+    background-color: #E8F3E8;
+}
+
+input[id="ant"]:checked + label {
+    border-color: #888;
+    background-color: #D2E7D2;
+}
+
+input[id="joy"] {
+    border-color: #888;
+    background-color: #E8F3E8;
+}
+
+input[id="joy"]:checked + label {
+    border-color: #888;
+    background-color: #D2E7D2;
+}
+
+input[id="sur"] {
+    border-color: #888;
+    background-color: #E8F3E8;
+}
+
+input[id="sur"]:checked + label {
+    border-color: #888;
+    background-color: #D2E7D2;
+}
+
+input[id="tru"] {
+    border-color: #888;
+    background-color: #E8F3E8;
+}
+
+input[id="tru"]:checked + label {
+    border-color: #888;
+    background-color: #D2E7D2;
+}
+
+input[id="ang"] {
+    border-color: #888;
+    background-color: #FFCCCC;
+}
+
+input[id="ang"]:checked + label {
+    border-color: #888;
+    background-color: #FFCCCC;
+}
+
+input[id="fea"] {
+    border-color: #888;
+    background-color: #FFCCCC;
+}
+
+input[id="fea"]:checked + label {
+    border-color: #888;
+    background-color: #FFCCCC;
+}
+
+input[id="sad"] {
+    border-color: #888;
+    background-color: #FFCCCC;
+}
+
+input[id="sad"]:checked + label {
+    border-color: #888;
+    background-color: #FFCCCC;
+}
+
+input[id="dis"] {
+    border-color: #888;
+    background-color: #FFCCCC;
+}
+
+input[id="dis"]:checked + label {
+    border-color: #888;
+    background-color: #FFCCCC;
 }
 
 #submit {
-    border-color: limegreen;
-    background-color: limegreen;
+    color: whitesmoke;
+    border-color: cornflowerblue;
+    background-color: cornflowerblue;
 }
 
 #submit:hover {
-    border-color: #1B701B;
-    background-color: #1B701B;
+    border-color: #4668A5;
+    background-color: #4668A5;
 }

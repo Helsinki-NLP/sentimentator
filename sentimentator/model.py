@@ -63,15 +63,32 @@ class Document(db.Model):
     _did = db.Column('id', db.Integer, primary_key=True)
     _document = db.Column('document', db.String)
 
+    @property
+    def did(self):
+        return self._did
+
 
 class Alignment(db.Model):
     __tablename__ = 'alignment'
     _align_id = db.Column('alignment_id', db.Integer, primary_key=True)
-    _lid = db.Column('language_id', db.Integer, db.ForeignKey('language.id'))
-    _did = db.Column('document_id', db.Integer, db.ForeignKey('document.id'))
-    _sid = db.Column('sentence_id', db.Integer, db.ForeignKey('sentence.id'))
+    _lid1 = db.Column('lid1', db.Integer, db.ForeignKey('language.id'))
+    _lid2 = db.Column('lid2', db.Integer, db.ForeignKey('language.id'))
+    _did1 = db.Column('did1', db.Integer, db.ForeignKey('document.id'))
+    _did2 = db.Column('did2', db.Integer, db.ForeignKey('document.id'))
+    _sid1 = db.Column('sid1', db.Integer, db.ForeignKey('sentence.id'))
+    _sid2 = db.Column('sid2', db.Integer, db.ForeignKey('sentence.id'))
 
-db.Index('ix_alignment_lookup', Alignment._lid, Alignment._did, Alignment._sid)
+    # def __init__(self, lid1, lid2, did1, did2, sid1, sid2):
+    #     self._lid1 = lid1
+    #     self._lid2 = lid2
+    #     self._did1 = did1
+    #     self._did2 = did2
+    #     self._sid1 = sid1
+    #     self._sid2 = sid2
+
+
+db.Index('ix_alignment_lookup_1', Alignment._lid1, Alignment._lid2, Alignment._did1, Alignment._did2,
+         Alignment._sid1, Alignment._sid2)
 
 
 class User(db.Model, UserMixin):
