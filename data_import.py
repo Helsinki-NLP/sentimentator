@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from sentimentator.app import app
-from sentimentator.model import db, Language, Sentence, User, Alignment, Document
+from sentimentator.model import db, Language, Sentence, User
 from argparse import ArgumentParser
 import re
 
@@ -29,6 +29,8 @@ def init_db():
             db.session.add(User(username='admin'))
         else:
             admin.set_password('flyingtiger')
+        admin = User.query.filter_by(_user='admin').first()
+        admin.set_password('flyingtiger')
         db.session.commit()
 
 # Function to check if the language exists in database
