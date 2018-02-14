@@ -3,7 +3,7 @@
 # Skip button
 # username + score display on annotation page
 
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for, make_response
 
 from sentimentator.meta import Message, Status
 from sentimentator.database import init, get_random_sentence, save_annotation, get_score, get_username
@@ -11,6 +11,9 @@ from flask_login import LoginManager, current_user, logout_user, login_required,
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
+from functools import wraps, update_wrapper
+from werkzeug.http import http_date
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -27,6 +30,18 @@ login.login_view = 'login'
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+
+def disable_cache(view):
+    @wraps(view)
+    def disable_cache(*args, **kwargs):
+        resp = make_response(view(*args, **kwargs))
+        resp.headers['Last-Modified'] = http_date(datetime.now())
+        resp.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+        resp.headers['Pragma'] = 'no-cache'
+        resp.headers['Expires'] = '-1'
+        return resp
+    return update_wrapper(disable_cache, view)
 
 
 init(app)
@@ -79,6 +94,7 @@ def language():
 
 
 @app.route('/annotate/<lang>', methods=['GET', 'POST'])
+@disable_cache
 @login_required
 def annotate(lang):
     """
