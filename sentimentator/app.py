@@ -13,9 +13,6 @@ from wtforms.validators import DataRequired
 from functools import wraps, update_wrapper
 from werkzeug.http import http_date
 from datetime import datetime
-# from bokeh.models.widgets import Slider
-# from bokeh.layouts import widgetbox
-# from bokeh.io import curdoc
 
 
 app = Flask(__name__)
@@ -35,12 +32,6 @@ def load_user(id):
 
 
 init(app)
-
-# intensity = Slider(title='intensity', value='0.0', start='0.0', end='1.0', step='0.1')
-# inputs = widgetbox(intensity)
-#
-# curdoc().add_root(inputs, width=400)
-# curdoc().title = 'Intensity'
 
 
 def disable_cache(view):
