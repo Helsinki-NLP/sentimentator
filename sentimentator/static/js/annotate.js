@@ -6,7 +6,7 @@
 /* Toggle the visibility of the fine sentiment buttons
  */
 function fineToggle(visibility) {
-  var elem = document.querySelectorAll('#fine1, #fine2');
+  var elem = document.querySelectorAll('#fine1, #fine2, #slider');
   Array.prototype.forEach.call(elem, function(e) {
     e.style.display = visibility;
   });
@@ -18,19 +18,26 @@ function submitReveal() {
   document.getElementById('submit').style.display = 'block';
 }
 
+/* Reveal slider
+ */
+function sliderReveal() {
+  document.getElementById('slider').style.display = 'block';
+}
+
 function init() {
   /* Query for different button elements
    */
   var posneg  = document.querySelectorAll('#pos, #neg');
   var neutral = document.querySelectorAll('#neut');
   var fine    = document.querySelectorAll('#fine1 input, #fine2 input');
-  var hidden  = document.querySelectorAll('#fine1, #fine2, #submit');
+  var hidden  = document.querySelectorAll('#fine1, #fine2, #submit, #slider');
 
   /* Attach onChange callback functions to each button
    */
   Array.prototype.forEach.call(posneg, function(e) {
     e.onchange = function() {
       fineToggle('block');
+      sliderReveal();
       submitReveal();
     }
   });

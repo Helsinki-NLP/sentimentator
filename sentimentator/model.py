@@ -49,11 +49,13 @@ class Annotation(db.Model):
     _annotation = db.Column('annotation', db.String)
     _sid = db.Column('sentence_id', db.Integer, db.ForeignKey('sentence.id'))
     _uid = db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
+    _intensity = db.Column('intensity', db.Float)
 
-    def __init__(self, annotation, sentence_id, user_id):
+    def __init__(self, annotation, sentence_id, user_id, intensity):
         self._annotation = annotation
         self._sid = sentence_id
         self._uid = user_id
+        self._intensity = intensity
 
 db.Index('ix_annotation_lookup', Annotation._sid, Annotation._uid)
 
