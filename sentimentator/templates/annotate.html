@@ -38,6 +38,7 @@
   <div class="row" style="text-align: right; margin-top: 5%">
     <p class="username" style="font-size: larger">Logged in as: <b>{{ username }}</b></p>
     <p class="score" style="font-size: x-large; color: green">SCORE: <b>{{ score }}</b></p>
+    <a style="font-size: larger" href="/stats">Stats</a>
   </div>
 </div>
 <form method="post" action="/annotate/{{ lang }}">
@@ -113,10 +114,14 @@
     <label for="sad" class="button">sadness</label>
   </div>
 </div>
-
 <div class="four columns offset-by-four">
 <div class="row divide">
-<input type="submit" id="submit" class="button button-primary" value="save">
+  <input type="range" title="slider" id="slider" min="0" max="100" step="10">
+</div>
+</div>
+<div class="four columns offset-by-four">
+<div class="row divide">
+  <input type="submit" id="submit" class="button button-primary" value="save">
 </div>
 </div>
 </div>
@@ -130,7 +135,6 @@
 </div>
 </div>
 </form>
-
 <div class="container">
 <div class="row divide">
 <figure style="text-align: center">
