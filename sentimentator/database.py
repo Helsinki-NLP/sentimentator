@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy.sql.expression import func
 from json import dumps
 
 from sentimentator.meta import Status
-from sentimentator.model import db, Language, Sentence, Annotation, User
+from sentimentator.model import db, Language, Sentence, Annotation
 from flask_login import current_user
+from sqlalchemy.types import Unicode
+from sqlalchemy import func, and_
+import json
 
 
 VALID_FINE_SENTIMENTS = ['ant', 'joy', 'sur', 'ang', 'fea', 'dis', 'tru', 'sad']
@@ -37,16 +39,98 @@ def get_score():
         return number_of_annotations
 
 
+def get_positive():
+    if current_user.is_authenticated():
+        user_id = current_user._uid
+        positive = Annotation.query.filter(and_(Annotation._annotation.like("%pos%")) &
+                                                       Annotation._uid == user_id).count()
+        return positive
+
+
+def get_negative():
+    if current_user.is_authenticated():
+        user_id = current_user._uid
+        negative = Annotation.query.filter(and_(Annotation._annotation.like("%neg%")) &
+                                                       Annotation._uid == user_id).count()
+        return negative
+
+def get_neutral():
+    if current_user.is_authenticated():
+        user_id = current_user._uid
+        neutral = Annotation.query.filter(and_(Annotation._annotation.like("%neu%")) &
+                                                       Annotation._uid == user_id).count()
+        return neutral
+
+
+def get_anticipation():
+    if current_user.is_authenticated():
+        user_id = current_user._uid
+        anticipation = Annotation.query.filter(and_(Annotation._annotation.like("%ant%")) &
+                                                       Annotation._uid == user_id).count()
+        return anticipation
+
+def get_anger():
+    if current_user.is_authenticated():
+        user_id = current_user._uid
+        anger = Annotation.query.filter(and_(Annotation._annotation.like("%ang%")) &
+                                                       Annotation._uid == user_id).count()
+        return anger
+
+def get_disgust():
+    if current_user.is_authenticated():
+        user_id = current_user._uid
+        disgust = Annotation.query.filter(and_(Annotation._annotation.like("%dis%")) &
+                                                       Annotation._uid == user_id).count()
+        return disgust
+
+def get_fear():
+    if current_user.is_authenticated():
+        user_id = current_user._uid
+        fear = Annotation.query.filter(and_(Annotation._annotation.like("%fea%")) &
+                                                       Annotation._uid == user_id).count()
+        return fear
+
+
+def get_joy():
+    if current_user.is_authenticated():
+        user_id = current_user._uid
+        joy = Annotation.query.filter(and_(Annotation._annotation.like("%joy%")) &
+                                                       Annotation._uid == user_id).count()
+        return joy
+
+
+def get_sadness():
+    if current_user.is_authenticated():
+        user_id = current_user._uid
+        sadness = Annotation.query.filter(and_(Annotation._annotation.like("%sad%")) &
+                                                       Annotation._uid == user_id).count()
+        return sadness
+
+
+def get_surprise():
+    if current_user.is_authenticated():
+        user_id = current_user._uid
+        surprise = Annotation.query.filter(and_(Annotation._annotation.like("%sur%")) &
+                                                       Annotation._uid == user_id).count()
+        return surprise
+
+def get_trust():
+    if current_user.is_authenticated():
+        user_id = current_user._uid
+        trust = Annotation.query.filter(and_(Annotation._annotation.like("%tru%")) &
+                                                       Annotation._uid == user_id).count()
+        return trust
+
+
 def get_random_sentence(lang):
     """ Fetch a random sentence of given language """
+    # TODO: Allow user to annotate only previously unseen sentences or sentences with less than 3 annotations
     language = Language.query.filter_by(_language=lang).first()
     if language is None:
         return None
     else:
-        return Sentence.query \
-                   .filter_by(_lid=language._lid) \
-                   .order_by(func.random()) \
-                   .first()
+        sentence = Sentence.query.filter_by(_lid=language._lid).order_by(func.random()).first()
+        return sentence
 
 
 def _is_valid(fine):
