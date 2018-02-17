@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
-# Skip button
-# username + score display on annotation page
-
 from flask import Flask, render_template, request, flash, redirect, url_for, make_response
 
 from sentimentator.meta import Message, Status
-from sentimentator.database import init, get_random_sentence, save_annotation, get_score, get_username
+from sentimentator.database import init, get_random_sentence, save_annotation, get_score, get_username, \
+get_positive, get_anger, get_anticipation, get_disgust, get_fear, get_joy, get_negative, get_neutral, get_sadness, \
+    get_surprise, get_trust
 from flask_login import LoginManager, current_user, logout_user, login_required, login_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
@@ -14,6 +13,9 @@ from wtforms.validators import DataRequired
 from functools import wraps, update_wrapper
 from werkzeug.http import http_date
 from datetime import datetime
+# from bokeh.models.widgets import Slider
+# from bokeh.layouts import widgetbox
+# from bokeh.io import curdoc
 
 
 app = Flask(__name__)
@@ -32,6 +34,15 @@ def load_user(id):
     return User.query.get(int(id))
 
 
+init(app)
+
+# intensity = Slider(title='intensity', value='0.0', start='0.0', end='1.0', step='0.1')
+# inputs = widgetbox(intensity)
+#
+# curdoc().add_root(inputs, width=400)
+# curdoc().title = 'Intensity'
+
+
 def disable_cache(view):
     @wraps(view)
     def disable_cache(*args, **kwargs):
@@ -42,9 +53,6 @@ def disable_cache(view):
         resp.headers['Expires'] = '-1'
         return resp
     return update_wrapper(disable_cache, view)
-
-
-init(app)
 
 
 class LoginForm(FlaskForm):
@@ -125,6 +133,15 @@ def annotate(lang):
         else:
             pass
     return render_template('annotate.html', lang=lang, sentence=sen, sentence_id=sen.sid, score=score, username=username)
+
+
+@app.route('/stats')
+def stats():
+    return render_template('stats.html', score=get_score(), username=get_username(),
+                           positive=get_positive(), negative=get_negative(), neutral=get_neutral(),
+                           anticipation=get_anticipation(), joy=get_joy(), surprise=get_surprise(),
+                           trust=get_trust(), anger=get_anger(), disgust=get_disgust(), fear=get_fear(),
+                           sadness=get_sadness())
 
 
 @app.route('/logout')
