@@ -23,7 +23,6 @@
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/skeleton.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/custom.css') }}" />
 
-
   <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.ico') }}">
@@ -34,39 +33,26 @@
   <div class="row" style="text-align: right; margin-top: 5%">
     <p class="username" style="font-size: larger">Logged in as: <b>{{ username }}</b></p>
     <p class="score" style="font-size: x-large; color: green">SCORE: <b>{{ score }}</b></p>
-    <a style="font-size: larger" href="/stats">Stats</a>
   </div>
 </div>
 <div class="container" style="text-align: center">
   <div class="row">
     <h1>SENTIMENTATOR</h1>
-    <p>Choose the language in which you would like to annotate sentences.</p>
-    <div id="language">
-      <div class="six columns">
-        <a class="button" href="/annotate/en">English</a>
-        <a class="button" href="/annotate/fi">suomi</a>
-        <a class="button" href="/annotate/sv">svenska</a>
-      </div>
-      <div class="six columns">
-        <a class="button" href="/annotate/it">italiano</a>
-        <a class="button" href="/annotate/ru">русский</a>
-        <a class="button" href="/annotate/fr">français</a>
-      </div>
-    </div>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class=flashes>
-        {% for message in messages %}
-          <li><b>{{ message }}</b></li>
-        {% endfor %}
+    <div class="container" style="text-align: left; font-size: larger; line-height: 180%">
+        <p><b style="color: green; font-size: x-large">Total of annotated sentences: {{ score }}</b></p>
+        <ul><b style="color: cornflowerblue; font-size: x-large">Positive: {{ positive }}</b>
+            <li>Anticipation: <b style="color: cornflowerblue">{{ anticipation }}</b></li>
+            <li>Joy: <b style="color: cornflowerblue">{{ joy }}</b></li>
+            <li>Surprise: <b style="color: cornflowerblue">{{ surprise }}</b></li>
+            <li>Trust: <b style="color: cornflowerblue">{{ trust }}</b></li>
         </ul>
-      {% endif %}
-    {% endwith %}
-    <div>
-	  <figure style="text-align: center">
-	    <img src="/static/images/Plutchik_Wheel.png">
-        <figcaption><a href="https://en.wikipedia.org/wiki/Contrasting_and_categorization_of_emotions">Plutchik's wheel of emotions.</a></figcaption>
-      </figure>
+        <ul><b style="color: cornflowerblue; font-size: x-large">Neutral: {{ neutral }}</b></ul>
+        <ul><b style="color: cornflowerblue; font-size: x-large">Negative: {{ negative }}</b>
+            <li>Anger: <b style="color: cornflowerblue">{{ anger }}</b></li>
+            <li>Disgust: <b style="color: cornflowerblue">{{ disgust }}</b></li>
+            <li>Fear: <b style="color: cornflowerblue">{{ fear }}</b></li>
+            <li>Sadness: <b style="color: cornflowerblue">{{ sadness }}</b></li>
+        </ul>
     </div>
     <div class="six columns offset-by-three" style="text-align: center; font-size: small">
       <a href="/" class="button">BACK</a>
