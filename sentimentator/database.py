@@ -6,7 +6,6 @@ from json import dumps
 from sentimentator.meta import Status
 from sentimentator.model import db, Language, Sentence, Annotation
 from flask_login import current_user
-from flask import flash
 
 
 VALID_FINE_SENTIMENTS = ['ant', 'joy', 'sur', 'ang', 'fea', 'dis', 'tru', 'sad']
@@ -54,7 +53,7 @@ def _is_valid(fine):
     return fine in VALID_FINE_SENTIMENTS
 
 
-def _save(user_id, sen_id, data):
+def _save(user_id, sen_id, data, intensity):
     """
     Save validated sentiments to database
 
@@ -62,7 +61,7 @@ def _save(user_id, sen_id, data):
     fine   -- A list of fine sentiments
     """
     json = dumps(data)
-    annotation = Annotation(user_id=user_id, sentence_id=sen_id, annotation=json)
+    annotation = Annotation(user_id=user_id, sentence_id=sen_id, annotation=json, intensity=intensity)
     db.session.add(annotation)
     db.session.commit()
 
@@ -81,6 +80,7 @@ def save_annotation(req):
     sen_id = req.form.get('sentence-id')
     coarse = req.form.get('sentiment')
     fine = req.form.getlist('fine-sentiment')
+    intensity = req.form.get('slider')
 
     annotation = {
         'coarse': coarse
@@ -96,5 +96,5 @@ def save_annotation(req):
     else:
         return Status.ERR_COARSE
 
-    _save(user_id, sen_id, annotation)
+    _save(user_id, sen_id, annotation, intensity)
     return Status.OK
