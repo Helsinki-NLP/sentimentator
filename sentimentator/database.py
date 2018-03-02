@@ -5,12 +5,14 @@ from json import dumps
 from sentimentator.meta import Status
 from sentimentator.model import db, Language, Sentence, Annotation
 from flask_login import current_user
-from sqlalchemy.types import Unicode
-from sqlalchemy import func, and_
-import json
+from sqlalchemy import func
 
 
 VALID_FINE_SENTIMENTS = ['ant', 'joy', 'sur', 'ang', 'fea', 'dis', 'tru', 'sad']
+
+
+def debug(msg, obj):
+    print("{}: ({}) {}".format(msg, type(obj), str(obj)))
 
 
 def init(app):
@@ -25,101 +27,29 @@ def get_user():
         return user_id
 
 
-def get_username():
-    if current_user.is_authenticated():
-        username = current_user.user
-        return username
+def get_username(user_id):
+    username = current_user.user
+    return username
 
 
-def get_score():
+def get_score(user_id):
     """ Get annotation score by returning amount of annotations for logged-in user """
-    if current_user.is_authenticated():
-        user_id = current_user._uid
-        number_of_annotations = db.session.query(Annotation).filter_by(_uid=user_id).count()
-        return number_of_annotations
+    q = db.session.query(Annotation).filter_by(_uid=user_id)
+    return q.count()
 
 
-def get_positive():
-    if current_user.is_authenticated():
-        user_id = current_user._uid
-        positive = Annotation.query.filter(and_(Annotation._annotation.like("%pos%")) &
-                                                       Annotation._uid == user_id).count()
-        return positive
+def count(user_id, likeness):
+    """
+    Like parsing JSON is so three minutes ago...
 
+    likeness -- A search string (usually having leading and trailing %'s)
 
-def get_negative():
-    if current_user.is_authenticated():
-        user_id = current_user._uid
-        negative = Annotation.query.filter(and_(Annotation._annotation.like("%neg%")) &
-                                                       Annotation._uid == user_id).count()
-        return negative
-
-def get_neutral():
-    if current_user.is_authenticated():
-        user_id = current_user._uid
-        neutral = Annotation.query.filter(and_(Annotation._annotation.like("%neu%")) &
-                                                       Annotation._uid == user_id).count()
-        return neutral
-
-
-def get_anticipation():
-    if current_user.is_authenticated():
-        user_id = current_user._uid
-        anticipation = Annotation.query.filter(and_(Annotation._annotation.like("%ant%")) &
-                                                       Annotation._uid == user_id).count()
-        return anticipation
-
-def get_anger():
-    if current_user.is_authenticated():
-        user_id = current_user._uid
-        anger = Annotation.query.filter(and_(Annotation._annotation.like("%ang%")) &
-                                                       Annotation._uid == user_id).count()
-        return anger
-
-def get_disgust():
-    if current_user.is_authenticated():
-        user_id = current_user._uid
-        disgust = Annotation.query.filter(and_(Annotation._annotation.like("%dis%")) &
-                                                       Annotation._uid == user_id).count()
-        return disgust
-
-def get_fear():
-    if current_user.is_authenticated():
-        user_id = current_user._uid
-        fear = Annotation.query.filter(and_(Annotation._annotation.like("%fea%")) &
-                                                       Annotation._uid == user_id).count()
-        return fear
-
-
-def get_joy():
-    if current_user.is_authenticated():
-        user_id = current_user._uid
-        joy = Annotation.query.filter(and_(Annotation._annotation.like("%joy%")) &
-                                                       Annotation._uid == user_id).count()
-        return joy
-
-
-def get_sadness():
-    if current_user.is_authenticated():
-        user_id = current_user._uid
-        sadness = Annotation.query.filter(and_(Annotation._annotation.like("%sad%")) &
-                                                       Annotation._uid == user_id).count()
-        return sadness
-
-
-def get_surprise():
-    if current_user.is_authenticated():
-        user_id = current_user._uid
-        surprise = Annotation.query.filter(and_(Annotation._annotation.like("%sur%")) &
-                                                       Annotation._uid == user_id).count()
-        return surprise
-
-def get_trust():
-    if current_user.is_authenticated():
-        user_id = current_user._uid
-        trust = Annotation.query.filter(and_(Annotation._annotation.like("%tru%")) &
-                                                       Annotation._uid == user_id).count()
-        return trust
+    Returns the number of successful matches.
+    """
+    q = Annotation.query.filter_by(_uid=user_id)\
+        .filter(Annotation._annotation.like(likeness))
+    debug("get_pos(): SQL", q)
+    return q.count()
 
 
 def get_random_sentence(lang):
