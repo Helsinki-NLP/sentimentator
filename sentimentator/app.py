@@ -3,9 +3,7 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, make_response
 
 from sentimentator.meta import Message, Status
-from sentimentator.database import init, get_random_sentence, save_annotation, get_score, get_username, \
-get_positive, get_anger, get_anticipation, get_disgust, get_fear, get_joy, get_negative, get_neutral, get_sadness, \
-    get_surprise, get_trust
+from sentimentator.database import init, get_random_sentence, save_annotation, get_score, get_username, count
 from flask_login import LoginManager, current_user, logout_user, login_required, login_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
@@ -61,7 +59,8 @@ def index():
     Or login page
     """
     if current_user.is_authenticated:
-        return render_template('index.html', score=get_score(), username=get_username())
+        user_id = current_user._uid
+        return render_template('index.html', score=get_score(user_id), username=get_username(user_id))
     else:
         return redirect(url_for('login'))
 
@@ -81,7 +80,7 @@ def login():
             flash('Invalid username or password...')
             return redirect(url_for('login'))
         login_user(user)
-        return render_template('index.html', score=get_score(), username=get_username())
+        return render_template('index.html', score=get_score(current_user._uid), username=get_username(current_user._uid))
     return render_template('login.html', title='SIGN IN', form=form)
 
 
@@ -89,7 +88,9 @@ def login():
 @login_required
 def language():
     """ Language selection page """
-    return render_template('language.html', score=get_score(), username=get_username())
+    if current_user.is_authenticated:
+        user_id = current_user._uid
+        return render_template('language.html', score=get_score(user_id), username=get_username(user_id))
 
 
 @app.route('/annotate/<lang>', methods=['GET', 'POST'])
@@ -107,32 +108,38 @@ def annotate(lang):
     A sensible use case should not allow invalid input, thus error messages
     are not displayed to user, but logged instead.
     """
-    sen = get_random_sentence(lang)
-    score = get_score()
-    if sen is None:
-        flash('There are no sentences for the selected language!')
-        return redirect(url_for('language', score=score, username=get_username()))
-    else:
-        username = get_username()
-        if request.method == 'POST':
-            status = save_annotation(request)
-            score += 1
-            if status == Status.ERR_COARSE:
-                app.logger.error(Message.INPUT_COARSE)
-            elif status == Status.ERR_FINE:
-                app.logger.error(Message.INPUT_FINE)
+    if current_user.is_authenticated:
+        user_id = current_user._uid
+        sen = get_random_sentence(lang)
+        score = get_score(user_id)
+        if sen is None:
+            flash('There are no sentences for the selected language!')
+            return redirect(url_for('language', score=score, username=get_username(user_id)))
         else:
-            pass
-    return render_template('annotate.html', lang=lang, sentence=sen, sentence_id=sen.sid, score=score, username=username)
+            username = get_username(user_id)
+            if request.method == 'POST':
+                status = save_annotation(request)
+                score += 1
+                if status == Status.ERR_COARSE:
+                    app.logger.error(Message.INPUT_COARSE)
+                elif status == Status.ERR_FINE:
+                    app.logger.error(Message.INPUT_FINE)
+            else:
+                pass
+        return render_template('annotate.html', lang=lang, sentence=sen, sentence_id=sen.sid, score=score, username=username)
 
 
 @app.route('/stats')
 def stats():
-    return render_template('stats.html', score=get_score(), username=get_username(),
-                           positive=get_positive(), negative=get_negative(), neutral=get_neutral(),
-                           anticipation=get_anticipation(), joy=get_joy(), surprise=get_surprise(),
-                           trust=get_trust(), anger=get_anger(), disgust=get_disgust(), fear=get_fear(),
-                           sadness=get_sadness())
+    if current_user.is_authenticated:
+        user_id = current_user._uid
+        return render_template('stats.html', score=get_score(user_id), username=get_username(user_id),
+                           positive=count(user_id, "%pos%"), negative=count(user_id, "%neg%"),
+                           neutral=count(user_id, "%neu%"), anticipation=count(user_id, "%ant%"),
+                           joy=count(user_id, "%joy%"), surprise=count(user_id, "%sur%"),
+                           trust=count(user_id, "%tru%"), anger=count(user_id, "%ang%"),
+                           disgust=count(user_id, "%dis%"), fear=count(user_id, "%fea%"),
+                           sadness=count(user_id, "%sad%"))
 
 
 @app.route('/logout')

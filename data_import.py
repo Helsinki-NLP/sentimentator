@@ -28,9 +28,9 @@ def init_db():
         if admin is None:
             db.session.add(User(username='admin'))
         else:
-            admin.set_password('flyingtiger')
+            admin.set_password('kittycat')
         admin = User.query.filter_by(_user='admin').first()
-        admin.set_password('flyingtiger')
+        admin.set_password('kittycat')
         db.session.commit()
 
 # Function to check if the language exists in database

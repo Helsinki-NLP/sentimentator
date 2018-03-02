@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
+
 db = SQLAlchemy()
 
 
@@ -13,7 +14,6 @@ class Language(db.Model):
     _language = db.Column('language', db.String)
 
     def __init__(self, language):
-        #self._lid = id
         self._language = language
 
     @property
@@ -60,39 +60,6 @@ class Annotation(db.Model):
 db.Index('ix_annotation_lookup', Annotation._sid, Annotation._uid)
 
 
-class Document(db.Model):
-    __tablename__ = 'document'
-    _did = db.Column('id', db.Integer, primary_key=True)
-    _document = db.Column('document', db.String)
-
-    @property
-    def did(self):
-        return self._did
-
-
-class Alignment(db.Model):
-    __tablename__ = 'alignment'
-    _align_id = db.Column('alignment_id', db.Integer, primary_key=True)
-    _lid1 = db.Column('lid1', db.Integer, db.ForeignKey('language.id'))
-    _lid2 = db.Column('lid2', db.Integer, db.ForeignKey('language.id'))
-    _did1 = db.Column('did1', db.Integer, db.ForeignKey('document.id'))
-    _did2 = db.Column('did2', db.Integer, db.ForeignKey('document.id'))
-    _sid1 = db.Column('sid1', db.Integer, db.ForeignKey('sentence.id'))
-    _sid2 = db.Column('sid2', db.Integer, db.ForeignKey('sentence.id'))
-
-    # def __init__(self, lid1, lid2, did1, did2, sid1, sid2):
-    #     self._lid1 = lid1
-    #     self._lid2 = lid2
-    #     self._did1 = did1
-    #     self._did2 = did2
-    #     self._sid1 = sid1
-    #     self._sid2 = sid2
-
-
-db.Index('ix_alignment_lookup_1', Alignment._lid1, Alignment._lid2, Alignment._did1, Alignment._did2,
-         Alignment._sid1, Alignment._sid2)
-
-
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
     _uid = db.Column('id', db.Integer, primary_key=True)
@@ -127,3 +94,27 @@ class User(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self._pass, password)
+
+class Document(db.Model):
+    __tablename__ = 'document'
+    _did = db.Column('id', db.Integer, primary_key=True)
+    _document = db.Column('document', db.String)
+
+    @property
+    def did(self):
+        return self._did
+
+
+class Alignment(db.Model):
+    __tablename__ = 'alignment'
+    _align_id = db.Column('alignment_id', db.Integer, primary_key=True)
+    _lid1 = db.Column('lid1', db.Integer, db.ForeignKey('language.id'))
+    _lid2 = db.Column('lid2', db.Integer, db.ForeignKey('language.id'))
+    _did1 = db.Column('did1', db.Integer, db.ForeignKey('document.id'))
+    _did2 = db.Column('did2', db.Integer, db.ForeignKey('document.id'))
+    _sid1 = db.Column('sid1', db.Integer, db.ForeignKey('sentence.id'))
+    _sid2 = db.Column('sid2', db.Integer, db.ForeignKey('sentence.id'))
+
+
+db.Index('ix_alignment_lookup_1', Alignment._lid1, Alignment._lid2, Alignment._did1, Alignment._did2,
+         Alignment._sid1, Alignment._sid2)
