@@ -11,10 +11,6 @@ from sqlalchemy import func
 VALID_FINE_SENTIMENTS = ['ant', 'joy', 'sur', 'ang', 'fea', 'dis', 'tru', 'sad']
 
 
-def debug(msg, obj):
-    print("{}: ({}) {}".format(msg, type(obj), str(obj)))
-
-
 def init(app):
     """ Initiate datamodel """
     db.init_app(app)
@@ -48,7 +44,6 @@ def count(user_id, likeness):
     """
     q = Annotation.query.filter_by(_uid=user_id)\
         .filter(Annotation._annotation.like(likeness))
-    debug("get_pos(): SQL", q)
     return q.count()
 
 
