@@ -57,3 +57,9 @@ OPUS parallel corpus files are available for download at http://opus.nlpl.eu/Ope
 
 The demo dataset used in this project is taken from the OPUS corpus as presented in this paper:
 **P. Lison and J. Tiedemann, 2016, OpenSubtitles2016: Extracting Large Parallel Corpora from Movie and TV Subtitles. In Proceedings of the 10th International Conference on Language Resources and Evaluation (LREC 2016).**
+
+The demo version of Sentimentator is located at http://sentimentator.it.helsinki.fi/
+
+Please let us know if you use Sentimentator for your own project. We would love to know more about it! Use:
+Öhman, E. and Kajava, K. 2018. Sentimentator: Gamifying Fine-grained Sentiment Annotation. In Digital Humanities
+in the Nordic Countries 2018. CEUR Workshop Proceedings.
