@@ -74,6 +74,7 @@ class User(db.Model, UserMixin):
     _uid = db.Column('id', db.Integer, primary_key=True)
     _user = db.Column('user', db.String)
     _pass = db.Column('pass', db.String)
+    _rank = db.Column('rank', db.Float)
 
     @property
     def user(self):

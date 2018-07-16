@@ -96,6 +96,7 @@ def save_annotation(req):
     # Before using this function:
     # 1) Add the expert users to the db (for example using CLI)
     # 2) Add the _mode and _is_seed columns to the db (for example using CLI)
+    # 3) Add rank to db
     # For example, see how users are added in the init_db() function in data_import.py.
 
     annotation = {
