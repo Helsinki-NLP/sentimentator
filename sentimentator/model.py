@@ -51,11 +51,20 @@ class Annotation(db.Model):
     _uid = db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
     _intensity = db.Column('intensity', db.Float)
 
-    def __init__(self, annotation, sentence_id, user_id, intensity):
+    # Annotation mode: traditional or intuitive.
+    # TODO: Add to database.py functions to save these values to the db.
+    _mode = db.Column('mode', db.String)
+    # Whether the sentence is a seed sentence.
+    # Save this to db based on annotator ID: expert annotator etc.
+    _is_seed = db.Column('is_seed', db.Boolean)
+
+    def __init__(self, annotation, sentence_id, user_id, intensity, mode, is_seed):
         self._annotation = annotation
         self._sid = sentence_id
         self._uid = user_id
         self._intensity = intensity
+        self._mode = mode
+        self._is_seed = is_seed
 
 db.Index('ix_annotation_lookup', Annotation._sid, Annotation._uid)
 

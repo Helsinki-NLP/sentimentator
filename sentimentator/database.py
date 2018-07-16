@@ -91,6 +91,12 @@ def save_annotation(req):
     coarse = req.form.get('sentiment')
     fine = req.form.getlist('fine-sentiment')
     intensity = req.form.get('slider')
+    #TODO: save annotation mode and seed sentence values here.
+    # Note: add relevant button to interface.
+    # Before using this function:
+    # 1) Add the expert users to the db (for example using CLI)
+    # 2) Add the _mode and _is_seed columns to the db (for example using CLI)
+    # For example, see how users are added in the init_db() function in data_import.py.
 
     annotation = {
         'coarse': coarse
