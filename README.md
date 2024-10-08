@@ -51,7 +51,7 @@ Example alignment file:
     
  For example, to import English, in a shell inside a running container run:
 
-    python3 data_import.py en data/en/en.txt data/en/en.ids
+    python3 data_import.py en data/en/en.txt data/en/ids.txt
 
 OPUS parallel corpus files are available for download at http://opus.nlpl.eu/OpenSubtitles2018.php in the MOSES/GIZA++ format.
 
