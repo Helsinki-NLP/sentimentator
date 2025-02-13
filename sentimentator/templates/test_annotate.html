@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<meta charset="utf-8">
+<title>SENTIMENTATOR</title>
+<meta name="description" content="">
+<meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/normalize.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/skeleton.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/custom.css') }}" />
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.ico') }}">
+
+  <!-- JS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script src="{{ url_for('static', filename='js/annotate.js') }}"></script>
+
+</head>
+<body>
+<div class="container">
+  <div class="row" style="text-align: right; margin-top: 5%">
+    <p class="username" style="font-size: larger">Logged in as: <b>{{ username }}</b></p>
+    <p class="score" style="font-size: x-large; color: green">SCORE: <b>{{ score }}</b></p>
+    <a style="font-size: larger" href="/stats">Stats</a>
+  </div>
+</div>
+<form method="post" action="/test-annotate/en">
+<div class="container">
+<div class="row" style="text-align: center">
+  <h1>SENTIMENTATOR</h1>
+</div>
+
+<div class="row" style="text-align: center">
+  <p class="info">Select the emotions which you think best suit the sentence.</p>
+  <input type="hidden" name="sentence-id" value="{{ sentence_id }}">
+  <input type="hidden" name="user-id" value="{{ user_id }}">
+  <p class="sentence" style="font-size: 150%"><b>{{ sentence }}</b></p>
+</div>
+
+<div id="coarse" class="row divide">
+  <div class="four columns">
+    <input type="radio" name="sentiment" id="pos" value="pos">
+    <label for="pos" class="button button-pos">positive</label>
+  </div>
+
+  <div class="four columns">
+   <input type="radio" name="sentiment" id="neut" value="neu">
+   <label for="neut" class="button button-neu">neutral</label>
+  </div>
+
+  <div class="four columns">
+    <input type="radio" name="sentiment" id="neg" value="neg">
+    <label for="neg" class="button button-neg">negative</label>
+  </div>
+</div>
+
+<div id="fine1" class="row divide">
+  <div class="three columns">
+    <input type="checkbox" name="fine-sentiment" id="ant" value="ant">
+    <label for="ant" class="button" style="">anticipation</label>
+  </div>
+
+  <div class="three columns">
+    <input type="checkbox" name="fine-sentiment" id="sur" value="sur">
+    <label for="sur" class="button">surprise</label>
+  </div>
+
+  <div class="three columns">
+    <input type="checkbox" name="fine-sentiment" id="ang" value="ang">
+    <label for="ang" class="button">anger</label>
+  </div>
+
+  <div class="three columns">
+    <input type="checkbox" name="fine-sentiment" id="fea" value="fea">
+    <label for="fea" class="button">fear</label>
+  </div>
+</div>
+
+<div id="fine2" class="row">
+  <div class="three columns">
+    <input type="checkbox" name="fine-sentiment" id="joy" value="joy">
+    <label for="joy" class="button">joy</label>
+  </div>
+
+  <div class="three columns">
+    <input type="checkbox" name="fine-sentiment" id="tru" value="tru">
+    <label for="tru" class="button">trust</label>
+  </div>
+
+  <div class="three columns">
+    <input type="checkbox" name="fine-sentiment" id="dis" value="dis">
+    <label for="dis" class="button">disgust</label>
+  </div>
+
+  <div class="three columns">
+    <input type="checkbox" name="fine-sentiment" id="sad" value="sad">
+    <label for="sad" class="button">sadness</label>
+  </div>
+</div>
+<div class="four columns offset-by-four">
+<div class="row divide">
+  <input type="range" title="slider" name="slider" id="slider" min="0" max="100" step="10">
+</div>
+</div>
+<div class="four columns offset-by-four">
+<div class="row divide">
+  <input type="submit" id="submit" class="button button-primary" value="save">
+</div>
+</div>
+</div>
+</form>
+<form method="get" action="/test-annotate/en">
+<div class="container">
+<div class="four columns offset-by-four">
+<div class="row" style="text-align: center">
+  <input type="submit" id="skip" class="button" value="skip">
+</div>
+</div>
+</div>
+</form>
+<div class="container">
+<div class="row divide">
+<figure style="text-align: center">
+  <img src="/static/images/Plutchik_Wheel.png">
+  <figcaption><a href="https://en.wikipedia.org/wiki/Contrasting_and_categorization_of_emotions">Plutchik's wheel of emotions.</a></figcaption>
+</figure>
+    <div class="six columns offset-by-three" style="text-align: center; font-size: small">
+      <a href="/language" class="button">BACK</a>
+    </div>
+    <div class="six columns offset-by-three" style="text-align: center">
+      <a href="/logout" class="button">LOG OUT</a>
+</div>
+</div>
+</div>
+</body>
+</html>

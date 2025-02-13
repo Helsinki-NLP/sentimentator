@@ -3,9 +3,10 @@
 from json import dumps
 
 from sentimentator.meta import Status
-from sentimentator.model import db, Language, Sentence, Annotation
+from sentimentator.model import db, Language, Sentence, Annotation, TestSentence
 from flask_login import current_user
 from sqlalchemy import func
+from flask import session
 
 
 VALID_FINE_SENTIMENTS = ['ant', 'joy', 'sur', 'ang', 'fea', 'dis', 'tru', 'sad']
@@ -56,6 +57,26 @@ def get_random_sentence(lang):
     else:
         sentence = Sentence.query.filter_by(_lid=language._lid).order_by(func.random()).first()
         return sentence
+
+
+def get_test_sentence(lang, seen_sentences):
+    """ Fetch a specific sentence of given language """
+    language = Language.query.filter_by(_language=lang).first()
+    if language is None:
+        return None
+
+    # Get all sentences for the language, sorted by tsid
+    sentences = TestSentence.query.filter_by(_lid=language._lid).all()
+
+    # Iterate through the sentences and skip the ones already seen
+    for sentence in sentences:
+        if sentence.tsid not in seen_sentences:
+            # Mark this sentence as seen and return it
+            seen_sentences.add(sentence.tsid)
+            return sentence
+
+    # If no unseen sentences are found, return None
+    return None
 
 
 def _is_valid(fine):

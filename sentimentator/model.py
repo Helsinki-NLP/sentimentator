@@ -115,6 +115,27 @@ class Alignment(db.Model):
     _sid1 = db.Column('sid1', db.Integer, db.ForeignKey('sentence.id'))
     _sid2 = db.Column('sid2', db.Integer, db.ForeignKey('sentence.id'))
 
+class TestSentence(db.Model):
+    __tablename__ = 'test_sentence'
+    _tsid = db.Column('id', db.Integer, primary_key=True)
+    _sentence = db.Column('sentence', db.String)
+    _lid = db.Column('language_id', db.Integer, db.ForeignKey('language.id'))
+    _opus_sid = db.Column('opus_sid', db.Integer)
+    _opus_did = db.Column('opus_did', db.String)
+
+    def __init__(self, sentence, language_id, opus_did, opus_sid):
+        self._sentence = sentence
+        self._lid = language_id
+        self._opus_did = opus_did
+        self._opus_sid = opus_sid
+
+    @property
+    def tsid(self):
+        return self._tsid
+
+    def __str__(self):
+        return self._sentence
+
 
 db.Index('ix_alignment_lookup_1', Alignment._lid1, Alignment._lid2, Alignment._did1, Alignment._did2,
          Alignment._sid1, Alignment._sid2)
