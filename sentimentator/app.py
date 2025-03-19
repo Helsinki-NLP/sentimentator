@@ -3,7 +3,7 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, make_response
 
 from sentimentator.meta import Message, Status
-from sentimentator.database import init, get_random_sentence, get_test_sentence, save_annotation, get_score, get_username, count
+from sentimentator.database import init, get_random_sentence, get_test_sentence, save_annotation, get_score, get_username, count, get_seen_sentence, reset_user_test_sentences
 from flask_login import LoginManager, current_user, logout_user, login_required, login_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
@@ -177,12 +177,12 @@ def test_annotate(lang):
     are not displayed to user, but logged instead.
     """
     
-    seen_sentences = set()
     if current_user.is_authenticated:
         user_id = current_user._uid
-        sen = get_test_sentence(lang, seen_sentences)
-        app.logger.info(f"seen_sentences is {seen_sentences}")
-        seen_sentences.add(sen.tsid)
+        # Get seen tsids for this user
+        seen_tsids = get_seen_sentence(user_id)
+        sen = get_test_sentence(lang, user_id, seen_tsids)
+        # Get an unseen sentence
         score = get_score(user_id)
         if sen is None:
             flash('There are no sentences for the selected language!')
@@ -218,3 +218,14 @@ def stats():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+@app.route('/reset_sentences', methods=['GET'])
+@login_required
+def reset_sentences():
+    """
+    Route to reset the current user's seen test sentences.
+    """
+    user_id = current_user._uid  # Get the current user's _uid
+    reset_user_test_sentences(user_id)
+    flash('Your test sentences have been reset. You can start annotating again!', 'success')
+    return render_template('index.html', score=get_score(user_id), username=get_username(user_id))

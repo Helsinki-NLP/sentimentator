@@ -65,6 +65,7 @@ class User(db.Model, UserMixin):
     _uid = db.Column('id', db.Integer, primary_key=True)
     _user = db.Column('user', db.String(80), unique=True, nullable=False)
     _pass = db.Column('pass', db.String)
+    seen_sentences = db.relationship('UserSeenSentence', backref='user', lazy=True)
 
     @property
     def user(self):
@@ -94,6 +95,12 @@ class User(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self._pass, password)
+
+class UserSeenSentence(db.Model):
+    __tablename__ = 'user_seen_sentence'
+    _id = db.Column('id', db.Integer, primary_key=True)
+    _uid = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
+    _tsid = db.Column('tsid', db.Integer, db.ForeignKey('test_sentence.id'), nullable=False)
 
 class Document(db.Model):
     __tablename__ = 'document'

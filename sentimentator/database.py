@@ -3,7 +3,7 @@
 from json import dumps
 
 from sentimentator.meta import Status
-from sentimentator.model import db, Language, Sentence, Annotation, TestSentence
+from sentimentator.model import db, Language, Sentence, Annotation, TestSentence, UserSeenSentence
 from flask_login import current_user
 from sqlalchemy import func
 from flask import session
@@ -47,6 +47,14 @@ def count(user_id, likeness):
         .filter(Annotation._annotation.like(likeness))
     return q.count()
 
+def get_seen_sentence(user_id):
+    seen_tsids = {s._tsid for s in UserSeenSentence.query.filter_by(_uid=user_id).all()}
+    return seen_tsids
+
+def reset_user_test_sentences(user_id):
+    UserSeenSentence.query.filter_by(_uid=user_id).delete()
+    Annotation.query.filter_by(_uid=user_id).delete()
+    db.session.commit()
 
 def get_random_sentence(lang):
     """ Fetch a random sentence of given language """
@@ -59,25 +67,23 @@ def get_random_sentence(lang):
         return sentence
 
 
-def get_test_sentence(lang, seen_sentences):
+def get_test_sentence(lang, user_id, seen_tsids):
     """ Fetch a specific sentence of given language """
     language = Language.query.filter_by(_language=lang).first()
     if language is None:
         return None
 
+    sentence = TestSentence.query.filter_by(_lid=language._lid).filter(~TestSentence._tsid.in_(seen_tsids)).first()
     # Get all sentences for the language, sorted by tsid
-    sentences = TestSentence.query.filter_by(_lid=language._lid).all()
 
-    # Iterate through the sentences and skip the ones already seen
-    for sentence in sentences:
-        if sentence.tsid not in seen_sentences:
-            # Mark this sentence as seen and return it
-            seen_sentences.add(sentence.tsid)
-            return sentence
-
-    # If no unseen sentences are found, return None
-    return None
-
+    if sentence:
+        # Mark as seen
+        seen_entry = UserSeenSentence(_uid=user_id, _tsid=sentence._tsid)
+        db.session.add(seen_entry)
+        db.session.commit()
+        return sentence
+    else:
+        return None
 
 def _is_valid(fine):
     """ Return true if given argument is valid fine sentiment """
