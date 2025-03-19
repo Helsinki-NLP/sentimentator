@@ -51,7 +51,14 @@ def get_seen_sentence(user_id):
     seen_tsids = {s._tsid for s in UserSeenSentence.query.filter_by(_uid=user_id).all()}
     return seen_tsids
 
+def reset_user_sentences(user_id):
+    # reset only Annotation entries with a particular user_id
+    Annotation.query.filter_by(_uid=user_id).delete()
+    db.session.commit()
+
 def reset_user_test_sentences(user_id):
+    # reset both Annotation and UserSeenSentence entries with a particular user_id
+    # in order to start annotating the same test sentence again if the user wants
     UserSeenSentence.query.filter_by(_uid=user_id).delete()
     Annotation.query.filter_by(_uid=user_id).delete()
     db.session.commit()

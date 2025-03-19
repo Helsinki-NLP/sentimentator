@@ -3,7 +3,7 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, make_response
 
 from sentimentator.meta import Message, Status
-from sentimentator.database import init, get_random_sentence, get_test_sentence, save_annotation, get_score, get_username, count, get_seen_sentence, reset_user_test_sentences
+from sentimentator.database import init, get_random_sentence, get_test_sentence, save_annotation, get_score, get_username, count, get_seen_sentence, reset_user_sentences, reset_user_test_sentences
 from flask_login import LoginManager, current_user, logout_user, login_required, login_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
@@ -226,6 +226,15 @@ def reset_sentences():
     Route to reset the current user's seen test sentences.
     """
     user_id = current_user._uid  # Get the current user's _uid
+    reset_user_sentences(user_id)
+    return render_template('index.html', score=get_score(user_id), username=get_username(user_id))
+
+@app.route('/reset_test_sentences', methods=['GET'])
+@login_required
+def reset_test_sentences():
+    """
+    Route to reset the current user's seen test sentences.
+    """
+    user_id = current_user._uid  # Get the current user's _uid
     reset_user_test_sentences(user_id)
-    flash('Your test sentences have been reset. You can start annotating again!', 'success')
     return render_template('index.html', score=get_score(user_id), username=get_username(user_id))
