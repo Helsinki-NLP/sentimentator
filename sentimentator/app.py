@@ -7,15 +7,16 @@ from sentimentator.database import init, get_random_sentence, get_test_sentence,
 from flask_login import LoginManager, current_user, logout_user, login_required, login_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Length, EqualTo
 from functools import wraps, update_wrapper
 from werkzeug.http import http_date
 from datetime import datetime
+from sentimentator.model import db
 import logging
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'midnight-sun'
 
@@ -52,6 +53,11 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('SIGN IN')
 
+class RegistrationForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired(), Length(min=4, max=80)])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Register')
 
 from sentimentator.model import User
 
@@ -86,6 +92,30 @@ def login():
         return render_template('index.html', score=get_score(current_user._uid), username=get_username(current_user._uid))
     return render_template('login.html', title='SIGN IN', form=form)
 
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))  # Redirect if already logged in
+    
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        # Check if username already exists
+        existing_user = User.query.filter_by(user=form.username.data).first()
+        if existing_user:
+            flash('Username already taken. Please choose a different one.', 'error')
+            return render_template('register.html', form=form)
+        
+        # Create new user
+        user = User (form.username.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        
+        flash('Registration successful! Please log in.', 'success')
+        return redirect(url_for('login'))
+    
+    return render_template('register.html', title='REGISTER', form=form)
 
 @app.route('/language')
 @login_required

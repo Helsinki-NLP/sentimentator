@@ -63,7 +63,7 @@ db.Index('ix_annotation_lookup', Annotation._sid, Annotation._uid)
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
     _uid = db.Column('id', db.Integer, primary_key=True)
-    _user = db.Column('user', db.String)
+    _user = db.Column('user', db.String(80), unique=True, nullable=False)
     _pass = db.Column('pass', db.String)
 
     @property

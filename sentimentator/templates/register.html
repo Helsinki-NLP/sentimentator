@@ -41,7 +41,7 @@
 {% block content %}
     <div style="text-align: center;">
     <h1>SIGN IN</h1>
-    <form action="{{ url_for('login') }}" method="post" name="form">
+    <form action="{{ url_for('register') }}" method="post" name="form">
         {{ form.hidden_tag() }}
         <p>
             {{ form.username.label }}<br>
@@ -57,22 +57,16 @@
             <span style="color: red;">{{ error }}</span>
             {% endfor %}
         </p>
-        <p>{{ form.submit() }}</p>
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            <ul class=flashes>
-            {% for message in messages %}
-              <li>{{ message }}</li>
+        <p>
+            {{ form.confirm_password.label }}<br>
+            {{ form.confirm_password(size=40) }}<br>
+            {% for error in form.confirm_password.errors %}
+                <span style="color: red;">{{ error }}</span><br>
             {% endfor %}
-            </ul>
-          {% endif %}
-        {% endwith %}
-        {% block body %}{% endblock %}
-
+        </p>
+        <p>{{ form.submit() }}</p>
     </form>
-    <div class="six columns offset-by-three" style="text-align: center">
-      <a href="/register" class="button button-primary">SIGN UP</a>
-    </div>
+<p>Already have an account? <a href="{{ url_for('login') }}">Log in here</a>.</p>
     </div>
 {% endblock %}
 </body>
