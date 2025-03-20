@@ -12,13 +12,17 @@ from functools import wraps, update_wrapper
 from werkzeug.http import http_date
 from datetime import datetime
 from sentimentator.model import db
+from dotenv import load_dotenv
 import logging
+import os
 
+# load env variable from 'sentimentator/.env'
+load_dotenv()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'midnight-sun'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 
 login = LoginManager()
