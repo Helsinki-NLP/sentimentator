@@ -3,9 +3,10 @@
 from json import dumps
 
 from sentimentator.meta import Status
-from sentimentator.model import db, Language, Sentence, Annotation
+from sentimentator.model import db, Language, Sentence, Annotation, TestSentence, UserSeenSentence
 from flask_login import current_user
 from sqlalchemy import func
+from flask import session
 
 
 VALID_FINE_SENTIMENTS = ['ant', 'joy', 'sur', 'ang', 'fea', 'dis', 'tru', 'sad']
@@ -46,6 +47,21 @@ def count(user_id, likeness):
         .filter(Annotation._annotation.like(likeness))
     return q.count()
 
+def get_seen_sentence(user_id):
+    seen_tsids = {s._tsid for s in UserSeenSentence.query.filter_by(_uid=user_id).all()}
+    return seen_tsids
+
+def reset_user_sentences(user_id):
+    # reset only Annotation entries with a particular user_id
+    Annotation.query.filter_by(_uid=user_id).delete()
+    db.session.commit()
+
+def reset_user_test_sentences(user_id):
+    # reset both Annotation and UserSeenSentence entries with a particular user_id
+    # in order to start annotating the same test sentence again if the user wants
+    UserSeenSentence.query.filter_by(_uid=user_id).delete()
+    Annotation.query.filter_by(_uid=user_id).delete()
+    db.session.commit()
 
 def get_random_sentence(lang):
     """ Fetch a random sentence of given language """
@@ -57,6 +73,24 @@ def get_random_sentence(lang):
         sentence = Sentence.query.filter_by(_lid=language._lid).order_by(func.random()).first()
         return sentence
 
+
+def get_test_sentence(lang, user_id, seen_tsids):
+    """ Fetch a specific sentence of given language """
+    language = Language.query.filter_by(_language=lang).first()
+    if language is None:
+        return None
+
+    sentence = TestSentence.query.filter_by(_lid=language._lid).filter(~TestSentence._tsid.in_(seen_tsids)).first()
+    # Get all sentences for the language, sorted by tsid
+
+    if sentence:
+        # Mark as seen
+        seen_entry = UserSeenSentence(_uid=user_id, _tsid=sentence._tsid)
+        db.session.add(seen_entry)
+        db.session.commit()
+        return sentence
+    else:
+        return None
 
 def _is_valid(fine):
     """ Return true if given argument is valid fine sentiment """

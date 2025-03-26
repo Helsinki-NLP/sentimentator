@@ -29,55 +29,45 @@
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.ico') }}">
 
 </head>
-<body>
-<div class="container">
-  <div class="row" style="text-align: right; margin-top: 5%">
-    <p class="username" style="font-size: larger">Logged in as: <b>{{ username }}</b></p>
-    <p class="score" style="font-size: x-large; color: green">SCORE: <b>{{ score }}</b></p>
-    <a style="font-size: larger" href="/stats">Stats</a>
-  </div>
-</div>
+
 <div class="container" style="text-align: center">
-  <div class="row">
+  <div class="row" style="margin-top: 10%">
     <h1>SENTIMENTATOR</h1>
-    <p>Choose the language in which you would like to annotate sentences.</p>
-    <div id="language">
-      <div class="six columns">
-        <a class="button" href="/annotate/en">English</a>
-        <a class="button" href="/annotate/fi">suomi</a>
-        <a class="button" href="/annotate/sv">svenska</a>
-      </div>
-      <div class="six columns">
-        <a class="button" href="/annotate/it">italiano</a>
-        <a class="button" href="/annotate/ru">русский</a>
-        <a class="button" href="/annotate/fr">français</a>
-      </div>
-    </div>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class=flashes>
-        {% for message in messages %}
-          <li><b>{{ message }}</b></li>
-        {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
-    <div>
-	  <figure style="text-align: center">
-	    <img src="/static/images/Plutchik_Wheel.png">
-        <figcaption><a href="https://en.wikipedia.org/wiki/Contrasting_and_categorization_of_emotions">Plutchik's wheel of emotions.</a></figcaption>
-      </figure>
-    </div>
-    <div class="six columns offset-by-three" style="text-align: center; font-size: small">
-      <a href="/" class="button">BACK</a>
-    </div>
     <div class="six columns offset-by-three" style="text-align: center">
-      <a href="/logout" class="button">LOG OUT</a>
-    </div>
-    <div class="six columns offset-by-three" style="text-align: center">
-      <a class="button" href="/test-annotate/en">TEST DATA</a>
     </div>
   </div>
 </div>
+<body>
+{% block content %}
+    <div style="text-align: center;">
+    <h1>SIGN IN</h1>
+    <form action="{{ url_for('register') }}" method="post" name="form">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.username.label }}<br>
+            {{ form.username(size=40) }}<br>
+            {% for error in form.username.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size=40) }}<br>
+            {% for error in form.password.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.confirm_password.label }}<br>
+            {{ form.confirm_password(size=40) }}<br>
+            {% for error in form.confirm_password.errors %}
+                <span style="color: red;">{{ error }}</span><br>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+<p>Already have an account? <a href="{{ url_for('login') }}">Log in here</a>.</p>
+    </div>
+{% endblock %}
 </body>
 </html>

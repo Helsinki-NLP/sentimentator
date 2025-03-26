@@ -63,8 +63,9 @@ db.Index('ix_annotation_lookup', Annotation._sid, Annotation._uid)
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
     _uid = db.Column('id', db.Integer, primary_key=True)
-    _user = db.Column('user', db.String)
+    _user = db.Column('user', db.String(80), unique=True, nullable=False)
     _pass = db.Column('pass', db.String)
+    seen_sentences = db.relationship('UserSeenSentence', backref='user', lazy=True)
 
     @property
     def user(self):
@@ -95,6 +96,12 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self._pass, password)
 
+class UserSeenSentence(db.Model):
+    __tablename__ = 'user_seen_sentence'
+    _id = db.Column('id', db.Integer, primary_key=True)
+    _uid = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
+    _tsid = db.Column('tsid', db.Integer, db.ForeignKey('test_sentence.id'), nullable=False)
+
 class Document(db.Model):
     __tablename__ = 'document'
     _did = db.Column('id', db.Integer, primary_key=True)
@@ -114,6 +121,27 @@ class Alignment(db.Model):
     _did2 = db.Column('did2', db.Integer, db.ForeignKey('document.id'))
     _sid1 = db.Column('sid1', db.Integer, db.ForeignKey('sentence.id'))
     _sid2 = db.Column('sid2', db.Integer, db.ForeignKey('sentence.id'))
+
+class TestSentence(db.Model):
+    __tablename__ = 'test_sentence'
+    _tsid = db.Column('id', db.Integer, primary_key=True)
+    _sentence = db.Column('sentence', db.String)
+    _lid = db.Column('language_id', db.Integer, db.ForeignKey('language.id'))
+    _opus_sid = db.Column('opus_sid', db.Integer)
+    _opus_did = db.Column('opus_did', db.String)
+
+    def __init__(self, sentence, language_id, opus_did, opus_sid):
+        self._sentence = sentence
+        self._lid = language_id
+        self._opus_did = opus_did
+        self._opus_sid = opus_sid
+
+    @property
+    def tsid(self):
+        return self._tsid
+
+    def __str__(self):
+        return self._sentence
 
 
 db.Index('ix_alignment_lookup_1', Alignment._lid1, Alignment._lid2, Alignment._did1, Alignment._did2,

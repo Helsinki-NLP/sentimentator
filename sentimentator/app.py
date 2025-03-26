@@ -3,26 +3,34 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, make_response
 
 from sentimentator.meta import Message, Status
-from sentimentator.database import init, get_random_sentence, save_annotation, get_score, get_username, count
+from sentimentator.database import init, get_random_sentence, get_test_sentence, save_annotation, get_score, get_username, count, get_seen_sentence, reset_user_sentences, reset_user_test_sentences
 from flask_login import LoginManager, current_user, logout_user, login_required, login_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Length, EqualTo
 from functools import wraps, update_wrapper
 from werkzeug.http import http_date
 from datetime import datetime
+from sentimentator.model import db
+from dotenv import load_dotenv
+import logging
+import os
 
+# load env variable from 'sentimentator/.env'
+load_dotenv()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'midnight-sun'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 
 login = LoginManager()
 login.init_app(app)
 login.login_view = 'login'
 
+# Set up the logging configuration
+logging.basicConfig(level=logging.DEBUG)
 
 @login.user_loader
 def load_user(id):
@@ -49,6 +57,11 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('SIGN IN')
 
+class RegistrationForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired(), Length(min=4, max=80)])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Register')
 
 from sentimentator.model import User
 
@@ -83,6 +96,30 @@ def login():
         return render_template('index.html', score=get_score(current_user._uid), username=get_username(current_user._uid))
     return render_template('login.html', title='SIGN IN', form=form)
 
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))  # Redirect if already logged in
+    
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        # Check if username already exists
+        existing_user = User.query.filter_by(user=form.username.data).first()
+        if existing_user:
+            flash('Username already taken. Please choose a different one.', 'error')
+            return render_template('register.html', form=form)
+        
+        # Create new user
+        user = User (form.username.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        
+        flash('Registration successful! Please log in.', 'success')
+        return redirect(url_for('login'))
+    
+    return render_template('register.html', title='REGISTER', form=form)
 
 @app.route('/language')
 @login_required
@@ -128,6 +165,45 @@ def annotate(lang):
                 pass
         return render_template('annotate.html', lang=lang, sentence=sen, sentence_id=sen.sid, score=score, username=username)
 
+@app.route('/test-annotate/<lang>', methods=['GET', 'POST'])
+@disable_cache
+@login_required
+def test_annotate(lang):
+    """
+    Annotation page
+
+    lang -- User selected language
+
+    When annotation page is requested with POST method, there is incoming
+    annotation data which needs to be validated and saved to database.
+
+    A sensible use case should not allow invalid input, thus error messages
+    are not displayed to user, but logged instead.
+    """
+    
+    if current_user.is_authenticated:
+        user_id = current_user._uid
+        # Get seen tsids for this user
+        seen_tsids = get_seen_sentence(user_id)
+        sen = get_test_sentence(lang, user_id, seen_tsids)
+        # Get an unseen sentence
+        score = get_score(user_id)
+        if sen is None:
+            flash('There are no sentences for the selected language!')
+            return redirect(url_for('language', score=score, username=get_username(user_id)))
+        else:
+            username = get_username(user_id)
+            if request.method == 'POST':
+                status = save_annotation(request)
+                score += 1
+                if status == Status.ERR_COARSE:
+                    app.logger.error(Message.INPUT_COARSE)
+                elif status == Status.ERR_FINE:
+                    app.logger.error(Message.INPUT_FINE)
+            else:
+                pass
+        return render_template('test_annotate.html', lang=lang, sentence=sen, sentence_id=sen.tsid, score=score, username=username)
+
 
 @app.route('/stats')
 def stats():
@@ -146,3 +222,23 @@ def stats():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+@app.route('/reset_sentences', methods=['GET'])
+@login_required
+def reset_sentences():
+    """
+    Route to reset the current user's seen test sentences.
+    """
+    user_id = current_user._uid  # Get the current user's _uid
+    reset_user_sentences(user_id)
+    return render_template('index.html', score=get_score(user_id), username=get_username(user_id))
+
+@app.route('/reset_test_sentences', methods=['GET'])
+@login_required
+def reset_test_sentences():
+    """
+    Route to reset the current user's seen test sentences.
+    """
+    user_id = current_user._uid  # Get the current user's _uid
+    reset_user_test_sentences(user_id)
+    return render_template('index.html', score=get_score(user_id), username=get_username(user_id))
